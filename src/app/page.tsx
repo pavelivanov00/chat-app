@@ -1,20 +1,29 @@
 import Link from 'next/link';
-import styles from './page.module.css';
+import './home.css';
 
 export default function Home() {
   return (
-    <div className={styles.login}>
-      Welcome to Chatter. Start by logging in.
-      <div className={styles.loginForm}>
-        <div className={styles.username}>
-          <label htmlFor="username">Username: </label>
-          <input type="text" id="username"></input>
-        </div>
-        <div className={styles.password}>
-          <label htmlFor="password">Password: </label>
-          <input type="password" id="password"></input>
-        </div>
-        <div className={styles.signUp}>
+    <div className="loginContainer">
+      <div className='welcome'> Welcome to Chatter.</div>
+      <div className='welcome' style={{ marginBottom: "2.5rem" }}>
+        Start by logging in.
+      </div>
+
+      <div className="loginForm">
+        <input
+          type="text"
+          id="username"
+          placeholder="Email"
+          className="loginUsername"
+        />
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          className="loginPassword"
+        />
+        <button className="login">Log in</button>
+        <div className="registerHere">
           Don't have an account? <Link href="/register">Sign up here.</Link>
         </div>
       </div>

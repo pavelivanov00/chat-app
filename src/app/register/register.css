@@ -1,0 +1,78 @@
+body {
+    background-color: rgb(62, 65, 66);
+    color: rgb(255, 255, 255)
+}
+
+.registerContainer {
+    max-width: 300px;
+    margin: 4rem auto 0 auto;
+    padding: 1.5rem;
+    border: 1px solid #000000;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: rgb(48, 51, 52);
+}
+
+.register {
+    font-weight: bold;
+    font-size: 140%;
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.formGroup {
+    margin-bottom: 2rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* using different classnames because css "bleeds" sometimes */
+.registerUsername,
+.registerPassword,
+.registerEmail {
+    width: 100%;
+    padding: 8px;
+    border: 2px solid #000000;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: rgb(62, 65, 66);
+    color: #ffffff;
+}
+
+input[type="text"]::placeholder,
+input[type="password"]::placeholder,
+input[type="email"]::placeholder {
+  color: #ffffff;
+  opacity: 1;  
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.error {
+    color: rgb(250, 128, 128);
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.successMessage {
+    text-align: center;
+    color: green;
+    font-size: 18px;
+}
