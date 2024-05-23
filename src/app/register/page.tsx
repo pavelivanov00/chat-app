@@ -48,17 +48,35 @@ export default function Register() {
         return newErrors;
     };
 
-    const handleSubmit = (event: FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         const validationErrors = validate();
         if (Object.keys(validationErrors).length === 0) {
+          try {
+            const response = await fetch('/api/register', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(formData),
+            });
+      
+            if (!response.ok) {
+              throw new Error('Failed to register');
+            }
+      
+            const result = await response.json();
+            console.log('Form data submitted:', result);
             setSubmitted(true);
-           
-            console.log("Form data submitted:", formData);
+          } catch (error) {
+            console.error('Error submitting form:', error);
+          }
         } else {
-            setErrors(validationErrors);
+          setErrors(validationErrors);
         }
-    };
+      };
+      
+      
 
     return (
         <div className="registerContainer">
@@ -69,7 +87,7 @@ export default function Register() {
                 <div className="successMessage">Registration successful!</div>
             ) : (
                 <form onSubmit={handleSubmit}>
-                    <div className="formGroup">
+                    <div className="formElement">
                         <input
                             type="text"
                             id="username"
@@ -81,7 +99,7 @@ export default function Register() {
                         />
                         {errors.username && <span className="error">{errors.username}</span>}
                     </div>
-                    <div className="formGroup">
+                    <div className="formElement">
                         <input
                             type="email"
                             id="email"
@@ -93,7 +111,7 @@ export default function Register() {
                         />
                         {errors.email && <span className="error">{errors.email}</span>}
                     </div>
-                    <div className="formGroup">
+                    <div className="formElement">
                         <input
                             type="password"
                             id="password"
@@ -105,7 +123,7 @@ export default function Register() {
                         />
                         {errors.password && <span className="error">{errors.password}</span>}
                     </div>
-                    <div className="formGroup">
+                    <div className="formElement">
                         <input
                             type="password"
                             id="confirmPassword"
@@ -117,7 +135,11 @@ export default function Register() {
                         />
                         {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
                     </div>
-                    <button style={{ marginTop: "1rem" }}>Register</button>
+                    <button
+                        type="submit"
+                        className='registerButton'
+                    >
+                        Register</button>
                 </form>
             )}
         </div>

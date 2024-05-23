@@ -38,10 +38,10 @@ body {
 input[type="text"]::placeholder,
 input[type="password"]::placeholder {
   color: rgb(255, 255, 255);
-  opacity: 1;
+  opacity: 0.75;  
 }
 
-button {
+.loginButton {
   width: 85%;
   padding: 10px;
   background-color: #4CAF50;

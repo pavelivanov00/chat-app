@@ -22,7 +22,7 @@ export default function Home() {
           placeholder="Password"
           className="loginPassword"
         />
-        <button className="login">Log in</button>
+        <button className="loginButton">Log in</button>
         <div className="registerHere">
           Don't have an account? <Link href="/register">Sign up here.</Link>
         </div>

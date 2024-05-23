@@ -20,7 +20,7 @@ body {
     text-align: center;
 }
 
-.formGroup {
+.formElement {
     margin-bottom: 2rem;
 }
 
@@ -46,11 +46,11 @@ label {
 input[type="text"]::placeholder,
 input[type="password"]::placeholder,
 input[type="email"]::placeholder {
-  color: #ffffff;
-  opacity: 1;  
+  color: rgb(255, 255, 255);
+  opacity: 0.75;  
 }
 
-button {
+.registerButton {
     width: 100%;
     padding: 10px;
     background-color: #4CAF50;
