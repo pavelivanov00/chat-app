@@ -46,8 +46,8 @@ label {
 input[type="text"]::placeholder,
 input[type="password"]::placeholder,
 input[type="email"]::placeholder {
-  color: rgb(255, 255, 255);
-  opacity: 0.75;  
+    color: rgb(255, 255, 255);
+    opacity: 0.75;
 }
 
 .registerButton {
@@ -69,10 +69,25 @@ button:hover {
     color: rgb(250, 128, 128);
     font-size: 12px;
     margin-top: 5px;
+    margin-left: 2px;
 }
 
 .successMessage {
     text-align: center;
-    color: green;
+    color: rgb(4, 182, 4);
     font-size: 18px;
+}
+
+.loginMessage {
+    text-align: center;
+    font-size: 16px;
+    margin-top: 1.5rem;
+}
+
+a:link {
+    color: rgb(175, 175, 255);
+}
+
+a:visited {
+    color: rgb(213, 121, 255);
 }

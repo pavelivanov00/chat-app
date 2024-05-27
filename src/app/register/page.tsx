@@ -1,6 +1,7 @@
 'use client'
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import './register.css';
+import Link from 'next/link';
 
 type FormData = {
     username: string;
@@ -14,6 +15,7 @@ type FormErrors = {
     email?: string;
     password?: string;
     confirmPassword?: string;
+    emailTaken?: string;
 }
 
 export default function Register() {
@@ -52,31 +54,37 @@ export default function Register() {
         event.preventDefault();
         const validationErrors = validate();
         if (Object.keys(validationErrors).length === 0) {
-          try {
-            const response = await fetch('/api/register', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(formData),
-            });
-      
-            if (!response.ok) {
-              throw new Error('Failed to register');
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const result = await response.json();
+                if (result.message === "Email already exists") setErrors({
+                    emailTaken: "Email already exists"
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to register');
+                }
+
+                setSubmitted(true);
+            } catch (error) {
+                console.error('Error submitting form:', error);
             }
-      
-            const result = await response.json();
-            console.log('Form data submitted:', result);
-            setSubmitted(true);
-          } catch (error) {
-            console.error('Error submitting form:', error);
-          }
         } else {
-          setErrors(validationErrors);
+            setErrors({
+                username: validationErrors.username,
+                password: validationErrors.password,
+                confirmPassword: validationErrors.confirmPassword,
+            });
+            console.log(errors);
         }
-      };
-      
-      
+    };
 
     return (
         <div className="registerContainer">
@@ -84,7 +92,12 @@ export default function Register() {
                 Register
             </div>
             {submitted ? (
-                <div className="successMessage">Registration successful!</div>
+                <>
+                    <div className="successMessage">Registration successful!</div>
+                    <div className="loginMessage">
+                        You can now log in <Link href="/">here.</Link>
+                    </div>
+                </>
             ) : (
                 <form onSubmit={handleSubmit}>
                     <div className="formElement">
@@ -110,6 +123,7 @@ export default function Register() {
                             className="registerEmail"
                         />
                         {errors.email && <span className="error">{errors.email}</span>}
+                        {errors.emailTaken && <span className="error">{errors.emailTaken}</span>}
                     </div>
                     <div className="formElement">
                         <input
