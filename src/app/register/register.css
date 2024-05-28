@@ -7,16 +7,20 @@ body {
     max-width: 300px;
     margin: 4rem auto 0 auto;
     padding: 1.5rem;
-    border: 1px solid #000000;
+    border: 1px solid rgb(0, 0, 0);
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: rgb(48, 51, 52);
 }
 
-.register {
+.registerHeading {
     font-weight: bold;
     font-size: 140%;
     margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.registerForm {
     text-align: center;
 }
 
@@ -24,23 +28,17 @@ body {
     margin-bottom: 2rem;
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
 /* using different classnames because css "bleeds" sometimes */
 .registerUsername,
 .registerPassword,
 .registerEmail {
-    width: 100%;
+    width: 90%;
     padding: 8px;
-    border: 2px solid #000000;
+    border: 2px solid rgb(0, 0, 0);
     border-radius: 4px;
     box-sizing: border-box;
     background-color: rgb(62, 65, 66);
-    color: #ffffff;
+    color: rgb(255, 255, 255);
 }
 
 input[type="text"]::placeholder,
@@ -51,25 +49,26 @@ input[type="email"]::placeholder {
 }
 
 .registerButton {
-    width: 100%;
+    width: 90%;
     padding: 10px;
-    background-color: #4CAF50;
+    background-color: rgb(35, 118, 28);
     border: none;
     border-radius: 4px;
-    color: white;
+    color: rgb(255, 255, 255);
     font-size: 16px;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: rgb(20, 98, 14);
 }
 
 .error {
     color: rgb(250, 128, 128);
     font-size: 12px;
     margin-top: 5px;
-    margin-left: 2px;
+    margin-left: 17px;
+    display: flex;
 }
 
 .successMessage {

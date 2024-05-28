@@ -8,7 +8,7 @@ body {
   max-width: 300px;
   margin: 4rem auto 0 auto;
   padding: 1.5rem;
-  border: 1px solid #000000;
+  border: 1px solid rgb(0, 0, 0);
   border-radius: 8px;
   background-color: rgb(48, 51, 52);
   display: flex;
@@ -16,19 +16,37 @@ body {
   align-items: center;
 }
 
-.welcome {
+.welcomeHeading {
   font-weight: bold;
   font-size: 140%;
   margin-bottom: 4px;
 }
 
-/* using different classnames because css "bleeds" sometimes */
-.loginUsername,
-.loginPassword {
+.marginBottom {
+  margin-bottom: 2.5rem;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.loginFormElement {
   margin-bottom: 2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* using different classnames because css "bleeds" sometimes */
+.loginEmail,
+.loginPassword {
   width: 85%;
   padding: 7px;
-  border: 2px solid #000000;
+  border: 2px solid rgb(0, 0, 0);
   border-radius: 4px;
   box-sizing: border-box;
   background-color: rgb(62, 65, 66);
@@ -38,13 +56,21 @@ body {
 input[type="text"]::placeholder,
 input[type="password"]::placeholder {
   color: rgb(255, 255, 255);
-  opacity: 0.75;  
+  opacity: 0.75;
+}
+
+.errorLogin {
+  color: rgb(250, 128, 128);
+  font-size: 12px;
+  margin-top: 5px;
+  margin-left: 24px;
+  align-self: flex-start;
 }
 
 .loginButton {
   width: 85%;
   padding: 10px;
-  background-color: #4CAF50;
+  background-color: rgb(35, 118, 28);
   border: none;
   border-radius: 4px;
   color: white;
@@ -53,7 +79,7 @@ input[type="password"]::placeholder {
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: rgb(20, 98, 14);
 }
 
 .registerHere {

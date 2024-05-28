@@ -79,16 +79,16 @@ export default function Register() {
         } else {
             setErrors({
                 username: validationErrors.username,
+                email: validationErrors.email,
                 password: validationErrors.password,
                 confirmPassword: validationErrors.confirmPassword,
             });
-            console.log(errors);
         }
     };
 
     return (
         <div className="registerContainer">
-            <div className='register'>
+            <div className='registerHeading'>
                 Register
             </div>
             {submitted ? (
@@ -99,11 +99,10 @@ export default function Register() {
                     </div>
                 </>
             ) : (
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className='registerForm'>
                     <div className="formElement">
                         <input
                             type="text"
-                            id="username"
                             name="username"
                             value={formData.username}
                             onChange={handleChange}
@@ -115,7 +114,6 @@ export default function Register() {
                     <div className="formElement">
                         <input
                             type="email"
-                            id="email"
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
@@ -128,7 +126,6 @@ export default function Register() {
                     <div className="formElement">
                         <input
                             type="password"
-                            id="password"
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
@@ -140,7 +137,6 @@ export default function Register() {
                     <div className="formElement">
                         <input
                             type="password"
-                            id="confirmPassword"
                             name="confirmPassword"
                             value={formData.confirmPassword}
                             onChange={handleChange}
