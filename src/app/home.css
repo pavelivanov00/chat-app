@@ -6,6 +6,7 @@ body {
 .loginContainer {
   text-align: center;
   max-width: 300px;
+
   margin: 4rem auto 0 auto;
   padding: 1.5rem;
   border: 1px solid rgb(0, 0, 0);
@@ -18,12 +19,12 @@ body {
 
 .welcomeHeading {
   font-weight: bold;
-  font-size: 140%;
+  font-size: 160%;
   margin-bottom: 4px;
 }
 
 .marginBottom {
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
 }
 
 .loginForm {
@@ -34,7 +35,7 @@ body {
 }
 
 .loginFormElement {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -44,13 +45,13 @@ body {
 /* using different classnames because css "bleeds" sometimes */
 .loginEmail,
 .loginPassword {
-  width: 85%;
   padding: 7px;
   border: 2px solid rgb(0, 0, 0);
   border-radius: 4px;
   box-sizing: border-box;
   background-color: rgb(62, 65, 66);
   color: rgb(255, 255, 255);
+  font-size: 120%;
 }
 
 input[type="text"]::placeholder,
@@ -61,7 +62,7 @@ input[type="password"]::placeholder {
 
 .errorLogin {
   color: rgb(250, 128, 128);
-  font-size: 12px;
+  font-size: 100%;
   margin-top: 5px;
   margin-left: 24px;
   align-self: flex-start;
@@ -69,21 +70,23 @@ input[type="password"]::placeholder {
 
 .loginButton {
   width: 85%;
-  padding: 10px;
+  padding: 8px;
+  margin-top: 1rem;
   background-color: rgb(35, 118, 28);
   border: none;
   border-radius: 4px;
   color: white;
-  font-size: 16px;
+  font-size: 130%;
   cursor: pointer;
 }
 
-button:hover {
+.loginButton:hover {
   background-color: rgb(20, 98, 14);
 }
 
 .registerHere {
-  margin-top: 1.5rem;
+  margin-top: 2.5rem;
+  justify-self: flex-end;
 }
 
 a:link {
