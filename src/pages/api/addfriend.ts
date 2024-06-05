@@ -38,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         await friendRequest.save();
 
-        res.status(200).json({ message: 'Friend request sent successfully' });
+        res.status(200).json({ message: 'Friend request sent' });
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
     }

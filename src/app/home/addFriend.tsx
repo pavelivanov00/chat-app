@@ -18,26 +18,30 @@ const AddFriend: React.FC<addFriendProps> = ({ username }) => {
     };
 
     const handleAddFriend = async () => {
-        const response = await fetch('/api/addfriend', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: username,
-                friendUsername: friendUsername
-            })
-        });
+        try {
+            const response = await fetch('/api/addFriend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    friendUsername: friendUsername
+                })
+            });
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if (response.ok) {
-            setResponseMessage(data.message);
-            setResponseStatus('success');
-        } else {
-            setResponseMessage(data.message);
-            setResponseStatus('error');
-        };
+            if (response.ok) {
+                setResponseMessage(data.message);
+                setResponseStatus('success');
+            } else {
+                setResponseMessage(data.message);
+                setResponseStatus('error');
+            };
+        } catch (error) {
+            console.error('Error while adding friend:', error);
+        }
     }
     return (
         <>
