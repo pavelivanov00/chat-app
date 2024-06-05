@@ -2,7 +2,9 @@
 import { useEffect, useState } from 'react';
 import { parse } from 'cookie';
 import AddFriend from "./addFriend";
+import PendingRequests from './pendingRequests';
 import "./home.css";
+
 
 export default function Home() {
     const [user, setUser] = useState<{ email: string; username: string }>();
@@ -38,12 +40,18 @@ export default function Home() {
                     >
                         Add a friend
                     </button>
-                    <button className="friendButton">Pending</button>
+                    <button
+                        className="friendButton"
+                        onClick={() => setLeftContainerContent(Content.pending)}
+                    >
+                        Pending
+                    </button>
                     <button className="friendButton">Blocked</button>
                 </div>
                 <div className="friendsContainer">
                     {leftContainerContent === Content.friends && <>friends render here</>}
-                    {leftContainerContent === Content.addFriend && <AddFriend username={user.username}/>}
+                    {leftContainerContent === Content.addFriend && <AddFriend username={user.username} />}
+                    {leftContainerContent === Content.pending && <PendingRequests username={user.username} />}
                 </div>
             </div>
             <div className="greetContainer">
