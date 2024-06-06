@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState, useCallback } from "react";
-import "./pendingRequests.css";
 import { ObjectId } from "mongoose";
+import "./css/pendingRequests.css";
 
 type pendingRequestsProps = {
-  username: string;
+  requester: string;
 };
 
 type Request = {
@@ -12,12 +12,12 @@ type Request = {
   _id?: ObjectId;
 };
 
-const PendingRequests: React.FC<pendingRequestsProps> = ({ username }) => {
+const PendingRequests: React.FC<pendingRequestsProps> = ({ requester }) => {
   const [pendingRequests, setPendingRequests] = useState<Request[]>([]);
 
   const fetchPendingRequests = useCallback(async () => {
     try {
-      const response = await fetch(`/api/pendingRequests?requester=${username}`);
+      const response = await fetch(`/api/pendingRequests?requester=${requester}`);
       const data = await response.json();
       if (response.ok) {
         setPendingRequests(data.requests);
@@ -27,7 +27,7 @@ const PendingRequests: React.FC<pendingRequestsProps> = ({ username }) => {
     } catch (error) {
       console.error("Error:", error);
     }
-  }, [username]);
+  }, [requester]);
 
   useEffect(() => {
     fetchPendingRequests();
@@ -41,7 +41,7 @@ const PendingRequests: React.FC<pendingRequestsProps> = ({ username }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          requester: username,
+          requester: requester,
           id: id,
         }),
       });
@@ -61,7 +61,7 @@ const PendingRequests: React.FC<pendingRequestsProps> = ({ username }) => {
     <>
       <>Pending Requests:</>
       <div className="pendingRequestsContainer">
-        {pendingRequests.map((request) => (
+        {pendingRequests.map(request => (
           <div className="pendingRequest" key={request._id}>
             <div>{request.recipient}</div>
             <button

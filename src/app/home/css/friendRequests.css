@@ -1,0 +1,39 @@
+.friendRequestsContainer {
+    border: 1px solid black;
+    border-left: none;
+    border-right: none;
+    background-color: rgb(62, 65, 66);
+}
+
+.friendRequestLabel {
+    margin-bottom: 1rem;
+}
+
+.friendRequests {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 3rem;
+}
+
+.friendRequest {
+    white-space: nowrap;
+    margin-left: 1.5rem;
+}
+
+.acceptButton {
+    background-color: rgb(62, 65, 66);
+    color: rgb(142, 240, 125);
+    border: 1px solid black;
+    cursor: pointer;
+    font-size: 100%;
+    white-space: nowrap;
+    padding: 4px 10px;
+    margin-right: 1rem;
+}
+
+.acceptButton:hover {
+    background-color: rgb(35, 35, 35);
+}

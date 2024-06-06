@@ -1,32 +1,31 @@
 "use client"
-import { ChangeEvent, useState } from "react";
-import "./addFriend.css";
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
+import "./css/sendRequest.css";
 
-type addFriendProps = {
-    username: string
+type sendRequestProps = {
+    requester: string
 }
 
-const AddFriend: React.FC<addFriendProps> = ({ username }) => {
-    const [friendUsername, setFriendUsername] = useState<string>('');
+const SendRequest: React.FC<sendRequestProps> = ({ requester }) => {
+    const [recipient, setRecipient] = useState<string>('');
     const [responseMessage, setResponseMessage] = useState('');
     const [responseStatus, setResponseStatus] = useState('');
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const name = event.target.value;
-        setFriendUsername(name);
+        setRecipient(name);
     };
 
     const handleAddFriend = async () => {
         try {
-            const response = await fetch('/api/addFriend', {
+            const response = await fetch('/api/sendRequest', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    username: username,
-                    friendUsername: friendUsername
+                    requester: requester,
+                    recipient: recipient
                 })
             });
 
@@ -68,4 +67,4 @@ const AddFriend: React.FC<addFriendProps> = ({ username }) => {
     )
 }
 
-export default AddFriend;
+export default SendRequest;

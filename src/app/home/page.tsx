@@ -1,10 +1,10 @@
 "use client"
 import { useEffect, useState } from 'react';
 import { parse } from 'cookie';
-import AddFriend from "./addFriend";
+import SendRequest from "./sendRequest";
 import PendingRequests from './pendingRequests';
-import "./home.css";
-
+import FriendRequests from './friendRequests';
+import "./css/home.css";
 
 export default function Home() {
     const [user, setUser] = useState<{ email: string; username: string }>();
@@ -49,9 +49,9 @@ export default function Home() {
                     <button className="friendButton">Blocked</button>
                 </div>
                 <div className="friendsContainer">
-                    {leftContainerContent === Content.friends && <>friends render here</>}
-                    {leftContainerContent === Content.addFriend && <AddFriend username={user.username} />}
-                    {leftContainerContent === Content.pending && <PendingRequests username={user.username} />}
+                    {leftContainerContent === Content.friends && <FriendRequests recipient={user.username} />}
+                    {leftContainerContent === Content.addFriend && <SendRequest requester={user.username} />}
+                    {leftContainerContent === Content.pending && <PendingRequests requester={user.username} />}
                 </div>
             </div>
             <div className="greetContainer">
