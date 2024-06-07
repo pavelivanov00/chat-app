@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState, useCallback } from "react";
 import { ObjectId } from "mongoose";
-import "./css/pendingRequests.css";
+import "../css/pendingRequests.css";
 
-type pendingRequestsProps = {
+type PendingRequestsProps = {
   requester: string;
 };
 
@@ -12,7 +12,7 @@ type Request = {
   _id?: ObjectId;
 };
 
-const PendingRequests: React.FC<pendingRequestsProps> = ({ requester }) => {
+const PendingRequests: React.FC<PendingRequestsProps> = ({ requester }) => {
   const [pendingRequests, setPendingRequests] = useState<Request[]>([]);
 
   const fetchPendingRequests = useCallback(async () => {
@@ -62,7 +62,7 @@ const PendingRequests: React.FC<pendingRequestsProps> = ({ requester }) => {
       <>Pending Requests:</>
       <div className="pendingRequestsContainer">
         {pendingRequests.map(request => (
-          <div className="pendingRequest" key={request._id}>
+          <div className="pendingRequest" key={request._id.toString()}>
             <div>{request.recipient}</div>
             <button
               className="cancelRequest"

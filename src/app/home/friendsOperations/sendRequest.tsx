@@ -1,12 +1,14 @@
 "use client"
 import React, { ChangeEvent, useState } from "react";
-import "./css/sendRequest.css";
+import { Content } from "./enum";
+import "../css/sendRequest.css";
 
-type sendRequestProps = {
-    requester: string
+type SendRequestProps = {
+    requester: string;
+    setContent: React.Dispatch<React.SetStateAction<Content>>;
 }
 
-const SendRequest: React.FC<sendRequestProps> = ({ requester }) => {
+const SendRequest: React.FC<SendRequestProps> = ({ requester, setContent }) => {
     const [recipient, setRecipient] = useState<string>('');
     const [responseMessage, setResponseMessage] = useState('');
     const [responseStatus, setResponseStatus] = useState('');
@@ -63,6 +65,7 @@ const SendRequest: React.FC<sendRequestProps> = ({ requester }) => {
             <div style={{ color: responseStatus === "success" ? "rgb(4, 182, 4)" : "rgb(238, 125, 125)", marginTop: "0.5rem" }}>
                 {responseMessage}
             </div>
+            <button onClick={() => setContent(Content.friends)}>Go back</button>
         </>
     )
 }

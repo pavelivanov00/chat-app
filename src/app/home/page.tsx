@@ -1,21 +1,15 @@
 "use client"
 import { useEffect, useState } from 'react';
 import { parse } from 'cookie';
-import SendRequest from "./sendRequest";
-import PendingRequests from './pendingRequests';
-import FriendRequests from './friendRequests';
+import SendRequest from "./friendsOperations/sendRequest";
+import PendingRequests from './friendsOperations/pendingRequests';
+import FriendsComponent from "./friendsOperations/friendsComponent";
 import "./css/home.css";
+import { Content } from "./friendsOperations/enum";
 
 export default function Home() {
     const [user, setUser] = useState<{ email: string; username: string }>();
     const [numberOfMessages, setNumberOfMessages] = useState<number>(0);
-
-    enum Content {
-        friends = "friends",
-        addFriend = "add a friend",
-        pending = "pending requests",
-        blocked = "blocked users"
-    }
 
     const [leftContainerContent, setLeftContainerContent] = useState<Content>(Content.friends);
     useEffect(() => {
@@ -36,7 +30,7 @@ export default function Home() {
                 <div className="friendsFunctions">
                     <button
                         className="friendButton addFriendButton"
-                        onClick={() => setLeftContainerContent(Content.addFriend)}
+                        onClick={() => setLeftContainerContent(Content.sendRequest)}
                     >
                         Add a friend
                     </button>
@@ -49,8 +43,10 @@ export default function Home() {
                     <button className="friendButton">Blocked</button>
                 </div>
                 <div className="friendsContainer">
-                    {leftContainerContent === Content.friends && <FriendRequests recipient={user.username} />}
-                    {leftContainerContent === Content.addFriend && <SendRequest requester={user.username} />}
+                    {leftContainerContent === Content.friends && <FriendsComponent username={user.username} />}
+                    {/* {leftContainerContent === Content.friends && <Friendships name={user.username} />} */}
+                    {leftContainerContent === Content.sendRequest && 
+                    <SendRequest requester={user.username} setContent={setLeftContainerContent}/>}
                     {leftContainerContent === Content.pending && <PendingRequests requester={user.username} />}
                 </div>
             </div>
