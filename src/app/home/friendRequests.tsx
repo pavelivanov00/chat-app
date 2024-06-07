@@ -59,22 +59,26 @@ const FriendRequests: React.FC<friendRequestsProps> = ({ recipient }) => {
     };
 
     return (
-        <div className="friendRequestsContainer">
-            <div className="friendRequestLabel"> Friend requests:</div>
-            {friendRequests.map(request => (
-                <div className="friendRequests" key={request._id}>
-                    <div className="friendRequest">
-                        {request.requester.length > 14 ? request.requester.substring(0, 14) + "..." : request.requester}
-                    </div>
-                    <button
-                        className="acceptButton"
-                        onClick={() => handleAcceptRequest(request.requester!)}
-                    >
-                        Accept
-                    </button>
-                </div>
-            ))}
-        </div >
+        <>
+            {friendRequests.length !== 0 &&
+                <div className="friendRequestsContainer">
+                    <div className="friendRequestLabel"> Friend requests:</div>
+                    {friendRequests.map(request => (
+                        <div className="friendRequests" key={request._id}>
+                            <div className="friendRequest">
+                                {request.requester.length > 14 ? request.requester.substring(0, 14) + "..." : request.requester}
+                            </div>
+                            <button
+                                className="acceptButton"
+                                onClick={() => handleAcceptRequest(request.requester!)}
+                            >
+                                Accept
+                            </button>
+                        </div>
+                    ))}
+                </div >
+            }
+        </>
     )
 }
 
