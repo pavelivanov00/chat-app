@@ -7,20 +7,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(405).json({ message: 'Method not allowed' });
     }
 
-    const { requester, id } = req.body;
+    const { recipient, requester } = req.body;
 
-    if (!id) {
-        return res.status(400).json({ message: 'Can not find id' });
+    if (!recipient || !requester) {
+        return res.status(400).json({ message: 'Something went wrong' });
     }
 
     try {
         await connectToDatabase();
 
-        const requests = await FriendRequest.deleteOne({ requester: requester, status: 'pending', _id: id });
+        const updateRequest = await FriendRequest.updateOne(
+            {
+                recipient: recipient,
+                requester: requester,
+                status: 'pending',
+            },
+            {
+                $set: { status: 'canceled' }
+            }
+        );
 
-        res.status(200).json({ message: 'Request canceled' });
+        if (updateRequest.modifiedCount === 0) {
+            throw new Error('Friend request not found or already canceled.');
+        }
+
+        res.status(201).json({ message: 'Friend request canceled' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
-    }
+    } 
 }

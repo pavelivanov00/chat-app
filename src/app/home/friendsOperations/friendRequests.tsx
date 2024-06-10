@@ -6,6 +6,7 @@ import "../css/friendRequests.css";
 type FriendRequestsProps = {
     friendRequests: FriendRequest[];
     onAcceptRequest: (requester: string) => void;
+    onCancelRequest: (requester: string) => void;
 };
 
 type FriendRequest = {
@@ -13,7 +14,7 @@ type FriendRequest = {
     _id: ObjectId;
 }
 
-const FriendRequests: React.FC<FriendRequestsProps> = ({ friendRequests, onAcceptRequest }) => {
+const FriendRequests: React.FC<FriendRequestsProps> = ({ friendRequests, onAcceptRequest, onCancelRequest }) => {
     return (
         <>
             {friendRequests.length !== 0 &&
@@ -29,13 +30,19 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({ friendRequests, onAccep
                             }}
                         >
                             <div className="friendRequest">
-                                {request.requester.length > 14 ? request.requester.substring(0, 14) + "..." : request.requester}
+                                {request.requester.length > 11 ? request.requester.substring(0, 11) + "..." : request.requester}
                             </div>
                             <button
                                 className="acceptButton"
                                 onClick={() => onAcceptRequest(request.requester!)}
                             >
                                 Accept
+                            </button>
+                            <button
+                                className="cancelButton"
+                                onClick={() => onCancelRequest(request.requester!)}
+                            >
+                                Cancel
                             </button>
                         </div>
                     ))}

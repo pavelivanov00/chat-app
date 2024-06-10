@@ -28,9 +28,23 @@
     font-size: 100%;
     white-space: nowrap;
     padding: 4px 10px;
-    margin-right: 1rem;
 }
 
 .acceptButton:hover {
+    background-color: rgb(35, 35, 35);
+}
+
+.cancelButton {
+    background-color: rgb(62, 65, 66);
+    color: rgb(255, 109, 96);
+    border: 1px solid black;
+    cursor: pointer;
+    font-size: 100%;
+    white-space: nowrap;
+    padding: 4px 10px;
+    margin-right: 1rem;
+}
+
+.cancelButton:hover {
     background-color: rgb(35, 35, 35);
 }

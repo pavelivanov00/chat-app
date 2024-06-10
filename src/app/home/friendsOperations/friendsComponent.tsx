@@ -75,11 +75,37 @@ const FriendsContainer: React.FC<FriendsContainerProps> = ({ username }) => {
         }
     };
 
+    const handleCancelRequest = async (requester: string) => {
+        try {
+            const response = await fetch("/api/cancelRequest", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    recipient: username,
+                    requester: requester,
+                }),
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                fetchFriendRequests();
+                fetchFriendships();
+            } else {
+                console.error(data.response);
+            }
+        } catch (error) {
+            console.error("Error cenceling request:", error);
+        }
+    };
+
     return (
         <>
             <FriendRequests 
                 friendRequests={friendRequests} 
-                onAcceptRequest={handleAcceptRequest} 
+                onAcceptRequest={handleAcceptRequest}
+                onCancelRequest={handleCancelRequest}  
             />
             <Friendships friendships={friendships} />
         </>

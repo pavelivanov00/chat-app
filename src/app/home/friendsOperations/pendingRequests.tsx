@@ -33,9 +33,9 @@ const PendingRequests: React.FC<PendingRequestsProps> = ({ requester }) => {
     fetchPendingRequests();
   }, [fetchPendingRequests]);
 
-  const handleCancelRequest = async (id: ObjectId) => {
+  const handleCancelOwnRequest = async (id: ObjectId) => {
     try {
-      const response = await fetch("/api/cancelRequest", {
+      const response = await fetch("/api/cancelOwnRequest", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,11 +62,11 @@ const PendingRequests: React.FC<PendingRequestsProps> = ({ requester }) => {
       <>Pending Requests:</>
       <div className="pendingRequestsContainer">
         {pendingRequests.map(request => (
-          <div className="pendingRequest" key={request._id.toString()}>
+          <div className="pendingRequest" key={request._id!.toString()}>
             <div>{request.recipient}</div>
             <button
               className="cancelRequest"
-              onClick={() => handleCancelRequest(request._id!)}
+              onClick={() => handleCancelOwnRequest(request._id!)}
             >
               X
             </button>
