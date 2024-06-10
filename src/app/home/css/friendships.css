@@ -1,7 +1,10 @@
-.friendships {
-    margin-top: 2rem;
+.friendsLabel {
+    margin-bottom: 1rem;
 }
 
 .friend {
-    margin-top: 1.5rem;
+    height: 3rem;
+    margin-left: 1.5rem;
+    display: flex;
+    align-items: center;
 }

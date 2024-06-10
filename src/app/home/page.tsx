@@ -4,14 +4,28 @@ import { parse } from 'cookie';
 import SendRequest from "./friendsOperations/sendRequest";
 import PendingRequests from './friendsOperations/pendingRequests';
 import FriendsComponent from "./friendsOperations/friendsComponent";
-import "./css/home.css";
 import { Content } from "./friendsOperations/enum";
+import "./css/home.css";
 
 export default function Home() {
     const [user, setUser] = useState<{ email: string; username: string }>();
     const [numberOfMessages, setNumberOfMessages] = useState<number>(0);
-
     const [leftContainerContent, setLeftContainerContent] = useState<Content>(Content.friends);
+
+    const updateUserLastOnline = async (username: string) => {
+        try {
+            await fetch('/api/updateLastOnline', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username })
+            });
+        } catch (error) {
+            console.error('Error updating last online time:', error);
+        }
+    };
+
     useEffect(() => {
         const cookies = parse(document.cookie);
 
@@ -20,8 +34,19 @@ export default function Home() {
         }
     }, []);
 
+    useEffect(() => {
+        if (user) {
+            const intervalId = setInterval(() => {
+                updateUserLastOnline(user.username);
+                console.log("db updated")
+            }, 60000);
+    
+            return () => clearInterval(intervalId);
+        }
+    }, [user]);
+
     if (!user) {
-        return <div>Loading...</div>;
+        return <div>Please relog...</div>;
     }
 
     return (
@@ -44,9 +69,8 @@ export default function Home() {
                 </div>
                 <div className="friendsContainer">
                     {leftContainerContent === Content.friends && <FriendsComponent username={user.username} />}
-                    {/* {leftContainerContent === Content.friends && <Friendships name={user.username} />} */}
-                    {leftContainerContent === Content.sendRequest && 
-                    <SendRequest requester={user.username} setContent={setLeftContainerContent}/>}
+                    {leftContainerContent === Content.sendRequest &&
+                        <SendRequest requester={user.username} setContent={setLeftContainerContent} />}
                     {leftContainerContent === Content.pending && <PendingRequests requester={user.username} />}
                 </div>
             </div>

@@ -15,6 +15,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Password is required'],
   },
+  lastOnline: {
+    type: Date,
+    default: Date.now,
+  },
 }, {
   timestamps: true,
 });

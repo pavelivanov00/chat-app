@@ -8,7 +8,7 @@ type FriendshipsProps = {
 const Friendships: React.FC<FriendshipsProps> = ({ friendships }) => {
     return (
         <div className="friendships">
-            <>Friends:</>
+            <div className="friendsLabel">Friends:</div>
             {friendships.map((friendship, index) => (
                 <div key={index} className="friend">
                     {friendship}
