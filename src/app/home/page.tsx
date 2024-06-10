@@ -38,7 +38,7 @@ export default function Home() {
         if (user) {
             const intervalId = setInterval(() => {
                 updateUserLastOnline(user.username);
-                console.log("db updated")
+                console.log(user.username+"'s last online updated")
             }, 60000);
     
             return () => clearInterval(intervalId);

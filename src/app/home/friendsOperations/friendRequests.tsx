@@ -30,20 +30,22 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({ friendRequests, onAccep
                             }}
                         >
                             <div className="friendRequest">
-                                {request.requester.length > 11 ? request.requester.substring(0, 11) + "..." : request.requester}
+                                {request.requester.length > 12 ? request.requester.substring(0, 12) + "..." : request.requester}
                             </div>
-                            <button
-                                className="acceptButton"
-                                onClick={() => onAcceptRequest(request.requester!)}
-                            >
-                                Accept
-                            </button>
-                            <button
-                                className="cancelButton"
-                                onClick={() => onCancelRequest(request.requester!)}
-                            >
-                                Cancel
-                            </button>
+                            <div className="friendRequestButtons">
+                                <button
+                                    className="acceptButton"
+                                    onClick={() => onAcceptRequest(request.requester!)}
+                                >
+                                    Accept
+                                </button>
+                                <button
+                                    className="cancelButton"
+                                    onClick={() => onCancelRequest(request.requester!)}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div >

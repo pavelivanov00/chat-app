@@ -7,14 +7,21 @@ type FriendshipsProps = {
 
 const Friendships: React.FC<FriendshipsProps> = ({ friendships }) => {
     return (
-        <div className="friendships">
-            <div className="friendsLabel">Friends:</div>
-            {friendships.map((friendship, index) => (
-                <div key={index} className="friend">
-                    {friendship}
+        <>
+            {friendships.length !== 0 &&
+                <div className="friendships">
+                    <div className="friendsLabel">Friends:</div>
+                    {friendships.map((name, index) => (
+                        <button
+                            key={index}
+                            className="friend"
+                        >
+                            {name}
+                        </button>
+                    ))}
                 </div>
-            ))}
-        </div>
+            }
+        </>
     );
 }
 
