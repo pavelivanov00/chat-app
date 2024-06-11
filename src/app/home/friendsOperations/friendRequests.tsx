@@ -1,7 +1,8 @@
 "use client"
 import { ObjectId } from "mongoose";
 import React from "react";
-import "../css/friendRequests.css";
+import "./css/friendRequests.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type FriendRequestsProps = {
     friendRequests: FriendRequest[];
@@ -30,20 +31,21 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({ friendRequests, onAccep
                             }}
                         >
                             <div className="friendRequest">
-                                {request.requester.length > 12 ? request.requester.substring(0, 12) + "..." : request.requester}
+                                {/* {request.requester.length > 14 ? request.requester.substring(0, 14) + "..." : request.requester} */}
+                                {request.requester}
                             </div>
                             <div className="friendRequestButtons">
                                 <button
                                     className="acceptButton"
                                     onClick={() => onAcceptRequest(request.requester!)}
                                 >
-                                    Accept
+                                    <FontAwesomeIcon icon="fa-solid fa-check" />
                                 </button>
                                 <button
                                     className="cancelButton"
                                     onClick={() => onCancelRequest(request.requester!)}
                                 >
-                                    Cancel
+                                     <FontAwesomeIcon icon="fa-solid fa-xmark" />
                                 </button>
                             </div>
                         </div>

@@ -25,7 +25,6 @@ body {
     display: flex;
     flex-direction: row;
     width: 100%;
-
 }
 
 .friendButton {
@@ -34,17 +33,25 @@ body {
     border: 1px solid black;
     cursor: pointer;
     height: 2rem;
-    width: 33.33333%;
+    width: 25%;
     font-size: 95%;
     white-space: nowrap;
 }
 
-.addFriendButton {
-    width: 50%;
+.friendButton:hover {
+    background-color: rgb(42, 44, 45);
 }
 
-.friendButton:hover {
-    background-color: rgb(35, 35, 35);
+.friendsAndFriendRequests {
+    color: rgb(99, 162, 217);
+}
+
+.sendFriendRequest {
+    color: rgb(75, 202, 75);
+}
+
+.blocked {
+    color: rgb(235, 61, 61);
 }
 
 .friendsContainer {
@@ -52,7 +59,7 @@ body {
     background-color: rgb(42, 44, 45);
     width: 100%;
     height: 100%;
-    border-top: 1px solid rgb(0, 0, 0); 
+    border-top: 1px solid rgb(0, 0, 0);
     padding-top: 2rem;
 }
 

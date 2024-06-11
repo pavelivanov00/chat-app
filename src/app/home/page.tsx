@@ -4,13 +4,24 @@ import { parse } from 'cookie';
 import SendRequest from "./friendsOperations/sendRequest";
 import PendingRequests from './friendsOperations/pendingRequests';
 import FriendsComponent from "./friendsOperations/friendsComponent";
-import { Content } from "./friendsOperations/enum";
-import "./css/home.css";
+import ChatWindow from './chatWindow';
+import { LeftContainerContent } from "./friendsOperations/enumLeftContainer";
+import { RightContainerContent } from "./enumRightContainer";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import '../../lib/fontawesome';
+import "./home.css";
 
 export default function Home() {
     const [user, setUser] = useState<{ email: string; username: string }>();
     const [numberOfMessages, setNumberOfMessages] = useState<number>(0);
-    const [leftContainerContent, setLeftContainerContent] = useState<Content>(Content.friends);
+
+    const [leftContainerContent, setLeftContainerContent] =
+        useState<LeftContainerContent>(LeftContainerContent.friends);
+
+    const [rightContainerContent, setRightContainerContent] =
+        useState<RightContainerContent>(RightContainerContent.greet);
+
+    const [chatWindowFriend, setChatWindowFriend] = useState<string | null>(null);
 
     const updateUserLastOnline = async (username: string) => {
         try {
@@ -38,9 +49,9 @@ export default function Home() {
         if (user) {
             const intervalId = setInterval(() => {
                 updateUserLastOnline(user.username);
-                console.log(user.username+"'s last online updated")
+                console.log(user.username + "'s last online updated")
             }, 60000);
-    
+
             return () => clearInterval(intervalId);
         }
     }, [user]);
@@ -54,29 +65,46 @@ export default function Home() {
             <div className="leftContainer">
                 <div className="friendsFunctions">
                     <button
-                        className="friendButton addFriendButton"
-                        onClick={() => setLeftContainerContent(Content.sendRequest)}
+                        className="friendButton friendsAndFriendRequests"
+                        onClick={() => setLeftContainerContent(LeftContainerContent.friends)}
                     >
-                        Add a friend
+                        <FontAwesomeIcon icon="fa-solid fa-user-group" />
+                    </button>
+                    <button
+                        className="friendButton sendFriendRequest"
+                        onClick={() => setLeftContainerContent(LeftContainerContent.sendRequest)}
+                    >
+                        <FontAwesomeIcon icon="fa-solid fa-user-plus" />
                     </button>
                     <button
                         className="friendButton"
-                        onClick={() => setLeftContainerContent(Content.pending)}
+                        onClick={() => setLeftContainerContent(LeftContainerContent.pending)}
                     >
-                        Pending
+                        <FontAwesomeIcon icon="fa-solid fa-hourglass-half" />
                     </button>
-                    <button className="friendButton">Blocked</button>
+                    <button className="friendButton blocked">
+                        <FontAwesomeIcon icon="fa-solid fa-ban" />
+                    </button>
                 </div>
                 <div className="friendsContainer">
-                    {leftContainerContent === Content.friends && <FriendsComponent username={user.username} />}
-                    {leftContainerContent === Content.sendRequest &&
+                    {leftContainerContent === LeftContainerContent.friends &&
+                        <FriendsComponent username={user.username} setContent={setRightContainerContent} 
+                        setChatWindowFriend={setChatWindowFriend} />}
+                    {leftContainerContent === LeftContainerContent.sendRequest &&
                         <SendRequest requester={user.username} setContent={setLeftContainerContent} />}
-                    {leftContainerContent === Content.pending && <PendingRequests requester={user.username} />}
+                    {leftContainerContent === LeftContainerContent.pending &&
+                        <PendingRequests requester={user.username} />}
                 </div>
             </div>
             <div className="greetContainer">
-                <h1>Hi, {user.username}!</h1>
-                <div>You have {numberOfMessages} new messages.</div>
+                {rightContainerContent === RightContainerContent.greet &&
+                    <>
+                        <h1>Hi, {user.username}!</h1>
+                        <div>You have {numberOfMessages} new messages.</div>
+                    </>
+                }
+                {rightContainerContent === RightContainerContent.chatWindow &&
+                    <ChatWindow chatWindowFriend={chatWindowFriend} />}
             </div>
         </div>
     );

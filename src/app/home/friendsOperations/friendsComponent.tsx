@@ -3,9 +3,12 @@ import React, { useEffect, useState, useCallback } from "react";
 import Friendships from "./friendships";
 import FriendRequests from "./friendRequests";
 import { ObjectId } from "mongoose";
+import { RightContainerContent } from "../enumRightContainer";
 
-type FriendsContainerProps = {
-    username: string
+type FriendsComponentProps = {
+    username: string;
+    setContent: React.Dispatch<React.SetStateAction<RightContainerContent>>; 
+    setChatWindowFriend: React.Dispatch<React.SetStateAction<string | null>>; 
 }
 
 type FriendRequest = {
@@ -13,7 +16,7 @@ type FriendRequest = {
     _id: ObjectId;
 }
 
-const FriendsContainer: React.FC<FriendsContainerProps> = ({ username }) => {
+const FriendsComponent: React.FC<FriendsComponentProps> = ({ username, setContent, setChatWindowFriend }) => {
     const [friendships, setFriendships] = useState<string[]>([]);
     const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
 
@@ -107,9 +110,9 @@ const FriendsContainer: React.FC<FriendsContainerProps> = ({ username }) => {
                 onAcceptRequest={handleAcceptRequest}
                 onCancelRequest={handleCancelRequest}  
             />
-            <Friendships friendships={friendships} />
+            <Friendships friendships={friendships} setContent={setContent} setChatWindowFriend={setChatWindowFriend} />
         </>
     );
 }
 
-export default FriendsContainer;
+export default FriendsComponent;

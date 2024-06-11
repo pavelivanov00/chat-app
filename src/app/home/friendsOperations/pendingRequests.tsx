@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState, useCallback } from "react";
 import { ObjectId } from "mongoose";
-import "../css/pendingRequests.css";
+import "./css/pendingRequests.css";
 
 type PendingRequestsProps = {
   requester: string;

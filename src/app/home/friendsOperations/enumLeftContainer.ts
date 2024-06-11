@@ -1,4 +1,4 @@
-export enum Content {
+export enum LeftContainerContent {
     friends = "friends",
     sendRequest = "send request",
     pending = "pending requests",

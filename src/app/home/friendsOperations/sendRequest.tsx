@@ -1,11 +1,11 @@
 "use client"
 import React, { ChangeEvent, useState } from "react";
-import { Content } from "./enum";
-import "../css/sendRequest.css";
+import { LeftContainerContent } from "./enumLeftContainer";
+import "./css/sendRequest.css";
 
 type SendRequestProps = {
     requester: string;
-    setContent: React.Dispatch<React.SetStateAction<Content>>;
+    setContent: React.Dispatch<React.SetStateAction<LeftContainerContent>>;
 }
 
 const SendRequest: React.FC<SendRequestProps> = ({ requester, setContent }) => {
@@ -65,7 +65,6 @@ const SendRequest: React.FC<SendRequestProps> = ({ requester, setContent }) => {
             <div style={{ color: responseStatus === "success" ? "rgb(4, 182, 4)" : "rgb(238, 125, 125)", marginTop: "0.5rem" }}>
                 {responseMessage}
             </div>
-            <button onClick={() => setContent(Content.friends)}>Go back</button>
         </>
     )
 }
