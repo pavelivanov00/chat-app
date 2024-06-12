@@ -1,0 +1,59 @@
+.chatWindowFriend {
+    font-size: 140%;
+    width: 100%;
+    border-bottom: 2px solid rgb(0, 0, 0);
+    height: 10%;
+}
+
+.chatWindow {
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+}
+
+.chatHistory {
+    height: 95%;
+}
+
+.textAreaForm {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: 2px solid rgb(0, 0, 0);
+    border-left: none;
+    background-color: rgb(62, 65, 66);
+}
+
+.messageInput {
+    background-color: rgb(62, 65, 66);
+    color: rgb(255, 255, 255);
+    border: none;
+    font-size: 130%;
+    padding: 10px;
+    padding-right: 0;
+    resize: none;
+    width: 100%;
+}
+
+.messageInput::placeholder {
+    color: rgb(249, 249, 249);
+    opacity: 0.60;
+}
+
+.messageInput:focus {
+    outline: none;
+}
+
+.sendMessageButton {
+    background-color: rgb(62, 65, 66);
+    color: rgb(183, 183, 183);
+    border: none;
+    cursor: pointer;
+    font-size: 200%;
+    padding-top: 6px;
+    padding-bottom: 4px;
+}
+
+.sendMessageButton:focus {
+    outline: none;
+}

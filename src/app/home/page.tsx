@@ -65,13 +65,13 @@ export default function Home() {
             <div className="leftContainer">
                 <div className="friendsFunctions">
                     <button
-                        className="friendButton friendsAndFriendRequests"
+                        className="friendButton colorBlue borderLeftNone"
                         onClick={() => setLeftContainerContent(LeftContainerContent.friends)}
                     >
                         <FontAwesomeIcon icon="fa-solid fa-user-group" />
                     </button>
                     <button
-                        className="friendButton sendFriendRequest"
+                        className="friendButton colorGreen"
                         onClick={() => setLeftContainerContent(LeftContainerContent.sendRequest)}
                     >
                         <FontAwesomeIcon icon="fa-solid fa-user-plus" />
@@ -82,7 +82,7 @@ export default function Home() {
                     >
                         <FontAwesomeIcon icon="fa-solid fa-hourglass-half" />
                     </button>
-                    <button className="friendButton blocked">
+                    <button className="friendButton colorRed borderRightNone">
                         <FontAwesomeIcon icon="fa-solid fa-ban" />
                     </button>
                 </div>
@@ -104,7 +104,7 @@ export default function Home() {
                     </>
                 }
                 {rightContainerContent === RightContainerContent.chatWindow &&
-                    <ChatWindow chatWindowFriend={chatWindowFriend} />}
+                    <ChatWindow chatWindowFriend={chatWindowFriend!} />}
             </div>
         </div>
     );

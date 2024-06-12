@@ -13,7 +13,7 @@ body {
 .leftContainer {
     display: flex;
     flex-direction: column;
-    border: 1px solid rgb(0, 0, 0);
+    border: 2px solid rgb(0, 0, 0);
     margin-top: 3rem;
     margin-left: 3rem;
     text-align: center;
@@ -31,6 +31,7 @@ body {
     background-color: rgb(62, 65, 66);
     color: rgb(255, 255, 255);
     border: 1px solid black;
+    border-top: none;
     cursor: pointer;
     height: 2rem;
     width: 25%;
@@ -42,16 +43,24 @@ body {
     background-color: rgb(42, 44, 45);
 }
 
-.friendsAndFriendRequests {
+.colorBlue {
     color: rgb(99, 162, 217);
 }
 
-.sendFriendRequest {
+.borderLeftNone {
+    border-left:none;
+}
+
+.colorGreen {
     color: rgb(75, 202, 75);
 }
 
-.blocked {
+.colorRed {
     color: rgb(235, 61, 61);
+}
+
+.borderRightNone {
+    border-right: none;
 }
 
 .friendsContainer {
@@ -68,7 +77,7 @@ body {
     margin-top: 3rem;
     margin-left: 4rem;
     background-color: rgb(42, 44, 45);
-    border: 1px solid rgb(0, 0, 0);
+    border: 2px solid rgb(0, 0, 0);
     width: 60%;
     text-align: center;
 }
