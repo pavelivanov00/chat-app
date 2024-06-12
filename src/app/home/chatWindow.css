@@ -13,9 +13,13 @@
 
 .chatHistory {
     height: 95%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: scroll;
 }
 
-.textAreaForm {
+.messageContainer {
     display: flex;
     align-items: center;
     width: 100%;
@@ -46,7 +50,7 @@
 
 .sendMessageButton {
     background-color: rgb(62, 65, 66);
-    color: rgb(183, 183, 183);
+    color: rgb(99, 170, 241);
     border: none;
     cursor: pointer;
     font-size: 200%;
@@ -56,4 +60,33 @@
 
 .sendMessageButton:focus {
     outline: none;
+}
+
+.chatMessage {
+    margin: 10px 0;
+}
+
+.chatMessage.sent {
+    align-self: flex-end;
+    background-color: rgb(99, 170, 241);
+    padding: 10px;
+    border-radius: 10px;
+    width: 40%;
+}
+
+.chatMessage.received {
+    align-self: flex-start;
+    background-color: rgb(146, 146, 146);
+    padding: 10px;
+    border-radius: 10px;
+    width: 40%;
+}
+
+.messageContent {
+    margin-bottom: 5px;
+}
+
+.messageTtimestamp {
+    font-size: 0.8em;
+    color: #2a2a2a;
 }

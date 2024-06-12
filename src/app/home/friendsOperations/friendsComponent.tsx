@@ -22,7 +22,7 @@ const FriendsComponent: React.FC<FriendsComponentProps> = ({ username, setConten
 
     const fetchFriendships = useCallback(async () => {
         try {
-            const response = await fetch(`/api/friendships?name=${username}`);
+            const response = await fetch(`/api/fetchFriendships?name=${username}`);
             const data = await response.json();
             if (response.ok) {
                 setFriendships(data.friends);
@@ -36,7 +36,7 @@ const FriendsComponent: React.FC<FriendsComponentProps> = ({ username, setConten
 
     const fetchFriendRequests = useCallback(async () => {
         try {
-            const response = await fetch(`/api/friendRequests?recipient=${username}`);
+            const response = await fetch(`/api/fetchFriendRequests?recipient=${username}`);
             const data = await response.json();
             if (response.ok) {
                 setFriendRequests(data.requests);

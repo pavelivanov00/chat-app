@@ -55,6 +55,10 @@ body {
     color: rgb(75, 202, 75);
 }
 
+.colorGray {
+    color: rgb(183, 183, 183);
+}
+
 .colorRed {
     color: rgb(235, 61, 61);
 }

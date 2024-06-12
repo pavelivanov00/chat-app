@@ -77,7 +77,7 @@ export default function Home() {
                         <FontAwesomeIcon icon="fa-solid fa-user-plus" />
                     </button>
                     <button
-                        className="friendButton"
+                        className="friendButton colorGray"
                         onClick={() => setLeftContainerContent(LeftContainerContent.pending)}
                     >
                         <FontAwesomeIcon icon="fa-solid fa-hourglass-half" />
@@ -104,7 +104,7 @@ export default function Home() {
                     </>
                 }
                 {rightContainerContent === RightContainerContent.chatWindow &&
-                    <ChatWindow chatWindowFriend={chatWindowFriend!} />}
+                    <ChatWindow receiver={chatWindowFriend!} sender={user.username}/>}
             </div>
         </div>
     );
