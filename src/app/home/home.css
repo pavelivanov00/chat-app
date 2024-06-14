@@ -8,6 +8,7 @@ body {
     flex-direction: row;
     min-width: 600px;
     min-height: 800px;
+    max-height: 800px;
 }
 
 .leftContainer {

@@ -1,6 +1,6 @@
 "use client"
 import TextareaAutosize from 'react-textarea-autosize';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import "./chatWindow.css";
 
@@ -12,21 +12,37 @@ type ChatWindowProps = {
 const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
     const [message, setMessage] = useState<string>('');
     const [messageHistory, setMessageHistory] = useState<object[]>([]);
+    const [receiverLastOnline, setReceiverLastOnline] = useState<Date>();
+    const ws = useRef<WebSocket | null>(null);
 
     const handleChangeMessage = (event: ChangeEvent<HTMLInputElement>) => {
-        const string = event.target.value;
-        setMessage(string);
+        setMessage(event.target.value);
     };
 
     useEffect(() => {
         fetchMessages(receiver, sender);
+        fetchLastOnline(receiver);
+
+        ws.current = new WebSocket('ws://localhost:8080');
+        ws.current.onopen = () => console.log('WebSocket connected');
+        ws.current.onmessage = (event) => {
+            try {
+                const receivedMessage = JSON.parse(event.data);
+                setMessageHistory(prevHistory => [...prevHistory, receivedMessage]);
+            } catch (error) {
+                console.error('Error parsing WebSocket message:', error);
+            }
+        };
+
+        return () => {
+            ws.current?.close();
+        };
     }, [receiver, sender]);
 
     const fetchMessages = async (sender: string, receiver: string) => {
         try {
             const response = await fetch(`/api/fetchMessages?sender=${sender}&receiver=${receiver}`);
             const data = await response.json();
-
             if (response.ok) {
                 setMessageHistory(data.messages);
             } else {
@@ -38,38 +54,34 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
     };
 
     const handleSendMessage = async () => {
-        try {
-            const response = await fetch('/api/sendMessage', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    receiver: receiver,
-                    sender: sender,
-                    message: message
-                })
-            });
-            if (response.ok) {
-                fetchMessages(receiver, sender);
-                setMessage('');
+        if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+            const newMessage = { receiver, sender, message, timestamp: new Date() };
+            const jsonString = JSON.stringify(newMessage);
+            ws.current.send(jsonString);
+
+            setMessageHistory(prevHistory => [...prevHistory, newMessage]);
+
+            try {
+                const response = await fetch('/api/sendMessage', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: jsonString,
+                });
+                if (!response.ok) {
+                    console.error('Error sending message:', await response.text());
+                }
+            } catch (error) {
+                console.error('Error while sending message:', error);
             }
-        } catch (error) {
-            console.error('Error while sending message:', error);
+
+            setMessage('');
         }
     };
-
-    const [receiverLastOnline, setReceiverLastOnline] = useState<Date>();
-
-    useEffect(() => {
-        fetchLastOnline(receiver);
-    }, [receiver]);
 
     const fetchLastOnline = async (receiver: string) => {
         try {
             const response = await fetch(`/api/fetchLastOnline?receiver=${receiver}`);
             const data = await response.json();
-
             if (response.ok) {
                 setReceiverLastOnline(data.lastOnline);
             } else {
@@ -84,7 +96,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
         <>
             <div className="chatWindowFriend">
                 {receiver}
-                <p>last online: {new Date(receiverLastOnline).toLocaleString()}</p>
+                <p className='lastOnlineStatus'>last online: {new Date(receiverLastOnline).toLocaleString()}</p>
             </div>
             <div className="chatWindow">
                 <div className="chatHistory">
@@ -94,7 +106,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
                             <div className="messageTimestamp">{new Date(msg.timestamp).toLocaleString()}</div>
                         </div>
                     ))}
-
                 </div>
                 <div className="messageContainer">
                     <TextareaAutosize
@@ -105,10 +116,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
                         onChange={handleChangeMessage}
                         value={message}
                     />
-                    <button
-                        className="sendMessageButton"
-                        onClick={() => handleSendMessage()}
-                    >
+                    <button className="sendMessageButton" onClick={handleSendMessage}>
                         <FontAwesomeIcon icon="fa-solid fa-paper-plane" />
                     </button>
                 </div>
