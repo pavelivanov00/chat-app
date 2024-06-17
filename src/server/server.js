@@ -9,7 +9,6 @@ wss.on('connection', (ws) => {
 
     ws.on('message', (message) => {
         console.log('Received:', message);
-        // Ensure the message is a JSON string before sending it
         let parsedMessage;
         try {
             parsedMessage = JSON.parse(message);

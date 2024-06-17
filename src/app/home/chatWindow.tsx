@@ -3,6 +3,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { ChangeEvent, useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import "./chatWindow.css";
+import { time } from 'console';
 
 type ChatWindowProps = {
     receiver: string;
@@ -92,21 +93,72 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
         }
     };
 
+    const formatLastOnline = (lastOnlineDate: Date): string => {
+        const now = new Date();
+        const diffMs = now.getTime() - new Date(lastOnlineDate).getTime();
+        const diffSeconds = Math.floor(diffMs / 1000);
+        const diffMinutes = Math.floor(diffSeconds / 60);
+        const diffHours = Math.floor(diffMinutes / 60);
+        const diffDays = Math.floor(diffHours / 24);
+
+        switch (true) {
+            case (diffSeconds < 60):
+                return "online now";
+            case (diffMinutes < 60):
+                return `last online: ${diffMinutes} minutes ago`;
+            case (diffHours < 24):
+                return `last online: ${diffHours} hours ago`;
+            default:
+                return `last online: ${diffDays} days ago`;
+        }
+    };
+
+    const formatMessageTimestamp = (timestamp: Date): string => {
+        const now = new Date();
+        const messageDate = new Date(timestamp);
+
+        const diffMs = now.getTime() - messageDate.getTime();
+        const diffSeconds = Math.floor(diffMs / 1000);
+        const diffMinutes = Math.floor(diffSeconds / 60);
+        const diffHours = Math.floor(diffMinutes / 60);
+        const diffDays = Math.floor(diffHours / 24);
+
+        const messageTimestampHours = messageDate.getHours().toString().padStart(2, '0');
+        const messageTimestampMinutes = messageDate.getMinutes().toString().padStart(2, '0');
+
+        switch (true) {
+            case (diffDays < 1 && now.getDate() === messageDate.getDate()):
+                return `Today at ${messageTimestampHours}:${messageTimestampMinutes}`;
+            case (diffDays < 2 && (now.getDate() - messageDate.getDate() === 1)):
+                return `Yesterday at ${messageTimestampHours}:${messageTimestampMinutes}`;
+            case (diffDays < 30):
+                return `${diffDays} days ago`;
+            case (diffDays < 365):
+                const diffMonths = Math.floor(diffDays / 30);
+                return `${diffMonths} months ago`;
+            default:
+                const diffYears = Math.floor(diffDays / 365);
+                return `${diffYears} years ago`;
+        }
+    };
+
     return (
         <>
             <div className="chatWindowFriend">
                 {receiver}
-                <p className='lastOnlineStatus'>last online: {new Date(receiverLastOnline).toLocaleString()}</p>
+                <p className='lastOnlineStatus'>
+                    {formatLastOnline(receiverLastOnline!)}
+                </p>
             </div>
             <div className="chatWindow">
                 <div className="chatHistory">
                     {messageHistory.map((msg, index) => (
                         <div key={index} className={`chatMessage ${msg.sender === sender ? 'sent' : 'received'}`}>
+                            <div className="messageTimestamp">{formatMessageTimestamp(msg.timestamp)}</div>
                             <div className="messageContent">{msg.message}</div>
-                            <div className="messageTimestamp">{new Date(msg.timestamp).toLocaleString()}</div>
-                        </div>
+                        </div>      
                     ))}
-                </div>
+                </div>                      
                 <div className="messageContainer">
                     <TextareaAutosize
                         className="messageInput"

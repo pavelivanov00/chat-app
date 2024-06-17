@@ -103,11 +103,22 @@
     width: 40%;
 }
 
-.messageContent {
-    margin-bottom: 5px;
+.chatMessage.received .messageContent {
+    text-align: left;
+    overflow-y: scroll;
 }
 
-.messageTtimestamp {
-    font-size: 0.8em;
-    color: #2a2a2a;
+.chatMessage.received .messageTimestamp {
+    font-size: 90%;
+    text-align: right;
+}
+
+.chatMessage.sent .messageContent {
+    text-align: right;
+    overflow: scroll;
+}
+
+.chatMessage.sent .messageTimestamp {
+    font-size: 90%;
+    text-align: left;
 }
