@@ -89,36 +89,50 @@
 
 .chatMessage.sent {
     align-self: flex-end;
-    background-color: rgb(99, 170, 241);
+    background-color: rgb(30, 118, 207);
     padding: 10px;
     border-radius: 10px;
-    width: 40%;
+    max-width: 40%;
 }
 
 .chatMessage.received {
     align-self: flex-start;
-    background-color: rgb(146, 146, 146);
+    background-color: rgb(129, 129, 129);
     padding: 10px;
     border-radius: 10px;
-    width: 40%;
+    max-width: 40%;
 }
 
 .chatMessage.received .messageContent {
     text-align: left;
-    overflow-y: scroll;
+    display: block;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 .chatMessage.received .messageTimestamp {
     font-size: 90%;
-    text-align: right;
+    text-align: left;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    margin-bottom: 0.5rem;
 }
 
 .chatMessage.sent .messageContent {
-    text-align: right;
-    overflow: scroll;
+    text-align: left;
+    display: block;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 .chatMessage.sent .messageTimestamp {
     font-size: 90%;
-    text-align: left;
+    text-align: right;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    margin-bottom: 0.5rem;
 }

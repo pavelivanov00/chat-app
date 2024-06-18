@@ -3,7 +3,6 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { ChangeEvent, useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import "./chatWindow.css";
-import { time } from 'console';
 
 type ChatWindowProps = {
     receiver: string;
