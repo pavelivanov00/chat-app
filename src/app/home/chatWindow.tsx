@@ -14,6 +14,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
     const [messageHistory, setMessageHistory] = useState<object[]>([]);
     const [receiverLastOnline, setReceiverLastOnline] = useState<Date>();
     const ws = useRef<WebSocket | null>(null);
+    const lastMessageRef = useRef<HTMLDivElement | null>(null);
+    const chatHistoryRef = useRef<HTMLDivElement | null>(null);
 
     const handleChangeMessage = (event: ChangeEvent<HTMLInputElement>) => {
         setMessage(event.target.value);
@@ -38,6 +40,20 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
             ws.current?.close();
         };
     }, [receiver, sender]);
+
+    useEffect(() => {
+        if (chatHistoryRef.current) {
+            setTimeout(() => {
+                chatHistoryRef.current!.scrollTop = chatHistoryRef.current!.scrollHeight;
+            }, 100);
+        }
+    }, [receiver]);
+
+    useEffect(() => {
+        if (lastMessageRef.current) {
+            lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messageHistory]);
 
     const fetchMessages = async (sender: string, receiver: string) => {
         try {
@@ -150,14 +166,18 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
                 </p>
             </div>
             <div className="chatWindow">
-                <div className="chatHistory">
+                <div className="chatHistory" ref={chatHistoryRef}>
                     {messageHistory.map((msg, index) => (
-                        <div key={index} className={`chatMessage ${msg.sender === sender ? 'sent' : 'received'}`}>
+                        <div
+                            key={index}
+                            className={`chatMessage ${msg.sender === sender ? 'sent' : 'received'}`}
+                            ref={index === messageHistory.length - 1 ? lastMessageRef : null}
+                        >
                             <div className="messageTimestamp">{formatMessageTimestamp(msg.timestamp)}</div>
                             <div className="messageContent">{msg.message}</div>
-                        </div>      
+                        </div>
                     ))}
-                </div>                      
+                </div>
                 <div className="messageContainer">
                     <TextareaAutosize
                         className="messageInput"
