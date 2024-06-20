@@ -157,6 +157,13 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
         }
     };
 
+    const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            handleSendMessage();
+        }
+    };
+
     return (
         <>
             <div className="chatWindowFriend">
@@ -185,6 +192,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
                         minRows={1}
                         maxRows={10}
                         onChange={handleChangeMessage}
+                        onKeyDown={handleKeyDown}
                         value={message}
                     />
                     <button className="sendMessageButton" onClick={handleSendMessage}>
