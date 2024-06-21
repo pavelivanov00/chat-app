@@ -1,0 +1,69 @@
+.settings {
+    display: flex;
+    flex-direction: column;
+}
+
+.changePasswordContainer {
+    margin-bottom: 2rem;
+}
+
+.settingsButton {
+    font-size: 110%;
+    border: 1px solid rgb(0, 0, 0);
+    border-left: none;
+    border-right: none;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding: 6px 0px 6px 0px;
+    background-color: rgb(62, 65, 66);
+    width: 100%;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+}
+
+.settingsButton:hover {
+    background-color: rgb(42, 44, 45);
+}
+
+.changePasswordInput, .changeUsernameInput {
+    width: 100%;
+    height: 2.5rem;
+    padding: 8px;
+    border: 1px solid rgb(0, 0, 0);
+    border-left: none;
+    border-right: none;
+    box-sizing: border-box;
+    background-color: rgb(62, 65, 66);
+    color: rgb(255, 255, 255);
+    font-size: 110%;
+    margin-top: 0.5rem;
+}
+
+.changePasswordInput::placeholder, .changeUsernameInput::placeholder  {
+    color: rgb(255, 255, 255);
+    opacity: 0.75;
+}
+
+.logOut {
+    text-decoration: none;
+    font-size: 110%;
+    border: 1px solid rgb(0, 0, 0);
+    border-left: none;
+    border-right: none;
+    margin-top: 2rem;
+    padding: 6px 0px 6px 0px;
+    background-color: rgb(62, 65, 66);
+    width: 100%;
+}
+
+.logOut:link {
+    color: rgb(235, 61, 61);
+}
+
+.logOut:visited {
+    color: rgb(235, 61, 61);
+}
+
+.logOut:hover {
+    background-color: rgb(42, 44, 45);
+}

@@ -15,7 +15,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
     const [receiverLastOnline, setReceiverLastOnline] = useState<Date>();
     const ws = useRef<WebSocket | null>(null);
     const lastMessageRef = useRef<HTMLDivElement | null>(null);
-    const chatHistoryRef = useRef<HTMLDivElement | null>(null);
 
     const handleChangeMessage = (event: ChangeEvent<HTMLInputElement>) => {
         setMessage(event.target.value);
@@ -42,16 +41,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
     }, [receiver, sender]);
 
     useEffect(() => {
-        if (chatHistoryRef.current) {
-            setTimeout(() => {
-                chatHistoryRef.current!.scrollTop = chatHistoryRef.current!.scrollHeight;
-            }, 100);
-        }
-    }, [receiver]);
-
-    useEffect(() => {
         if (lastMessageRef.current) {
-            lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+            lastMessageRef.current.scrollIntoView(true);
         }
     }, [messageHistory]);
 
@@ -173,7 +164,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
                 </p>
             </div>
             <div className="chatWindow">
-                <div className="chatHistory" ref={chatHistoryRef}>
+                <div className="chatHistory">
                     {messageHistory.map((msg, index) => (
                         <div
                             key={index}

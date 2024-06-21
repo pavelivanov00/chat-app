@@ -5,6 +5,7 @@ import SendRequest from "./friendsOperations/sendRequest";
 import PendingRequests from './friendsOperations/pendingRequests';
 import FriendsComponent from "./friendsOperations/friendsComponent";
 import ChatWindow from './chatWindow';
+import Settings from "./friendsOperations/settings";
 import { LeftContainerContent } from "./friendsOperations/enumLeftContainer";
 import { RightContainerContent } from "./enumRightContainer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -82,18 +83,26 @@ export default function Home() {
                     >
                         <FontAwesomeIcon icon="fa-solid fa-hourglass-half" />
                     </button>
-                    <button className="friendButton colorRed borderRightNone">
+                    <button className="friendButton colorRed">
                         <FontAwesomeIcon icon="fa-solid fa-ban" />
+                    </button>
+                    <button
+                        className="friendButton colorGray borderRightNone"
+                        onClick={() => setLeftContainerContent(LeftContainerContent.settings)}
+                    >
+                        <FontAwesomeIcon icon="fa-solid fa-gear" />
                     </button>
                 </div>
                 <div className="friendsContainer">
                     {leftContainerContent === LeftContainerContent.friends &&
-                        <FriendsComponent username={user.username} setContent={setRightContainerContent} 
-                        setChatWindowFriend={setChatWindowFriend} />}
+                        <FriendsComponent username={user.username} setContent={setRightContainerContent}
+                            setChatWindowFriend={setChatWindowFriend} />}
                     {leftContainerContent === LeftContainerContent.sendRequest &&
                         <SendRequest requester={user.username} setContent={setLeftContainerContent} />}
                     {leftContainerContent === LeftContainerContent.pending &&
                         <PendingRequests requester={user.username} />}
+                    {leftContainerContent === LeftContainerContent.settings &&
+                        <Settings user={user.username} />}
                 </div>
             </div>
             <div className="greetContainer">
@@ -104,7 +113,7 @@ export default function Home() {
                     </>
                 }
                 {rightContainerContent === RightContainerContent.chatWindow &&
-                    <ChatWindow receiver={chatWindowFriend!} sender={user.username}/>}
+                    <ChatWindow receiver={chatWindowFriend!} sender={user.username} />}
             </div>
         </div>
     );
