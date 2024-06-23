@@ -17,7 +17,9 @@ const Settings: React.FC<SettingsProps> = ({ user, userID }) => {
     const [newPassword, setNewPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
 
-    const [response, setResponse] = useState<string>('')
+    const [usernameResponse, setUsernameResponse] = useState<string>('')
+    const [passwordResponse, setPasswordResponse] = useState<string>('')
+
     const handleToggleChangeUsername = () => {
         setToggleChangeUsername(prevState => !prevState);
         setToggleChangePassword(false);
@@ -42,15 +44,32 @@ const Settings: React.FC<SettingsProps> = ({ user, userID }) => {
             });
             const data = await response.json();
 
-            setResponse(data.message);
-            console.log(response);
+            setUsernameResponse(data.message);
         } catch (error) {
             console.error("Error changing username:", error);
         }
     }
 
     const handleChangePassword = async () => {
+        if (newPassword !== confirmPassword) return setPasswordResponse("Passwords do not match")
+        try {
+            const response = await fetch("/api/changePassword", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: user,
+                    oldPassword: oldPassword,
+                    newPassword: newPassword,
+                }),
+            });
+            const data = await response.json();
 
+            setPasswordResponse(data.message);
+        } catch (error) {
+            console.error("Error changing username:", error);
+        }
     }
 
     return (
@@ -79,9 +98,10 @@ const Settings: React.FC<SettingsProps> = ({ user, userID }) => {
                     >
                         Confirm
                     </button>
-                    {response &&
-                        <div>
-                            {response}
+                    {usernameResponse &&
+                        <div
+                            className={(usernameResponse === "Username changed successfully") ? "changeResponseOK" : "changeResponseFail"}>
+                            {usernameResponse}
                         </div>
                     }
                 </div>
@@ -127,6 +147,12 @@ const Settings: React.FC<SettingsProps> = ({ user, userID }) => {
                     >
                         Confirm
                     </button>
+                    {passwordResponse &&
+                        <div
+                            className={(passwordResponse === "Password changed successfully") ? "changeResponseOK" : "changeResponseFail"}>
+                            {passwordResponse}
+                        </div>
+                    }
                 </div>
             }
             <Link href="/" className='logOut'>Log out</Link>

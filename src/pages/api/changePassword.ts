@@ -7,31 +7,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(405).json({ message: 'Method not allowed' });
     }
 
-    const { currentUsername, newUsername } = req.body;
+    const { username, oldPassword, newPassword } = req.body;
 
-    if (!currentUsername || !newUsername) {
-        return res.status(400).json({ message:  'Missing required query parameters currentUsername or newUsername'  });
+    if (!newPassword) {
+        return res.status(400).json({ message: 'Missing required query parameters username, newPassword or oldPassword' });
     }
 
     try {
         await connectToDatabase();
 
-        const currentUser = await User.findOne({ username: currentUsername });
+        const currentUser = await User.findOne({ username: username });
 
         if (!currentUser) {
             return res.status(404).json({ message: 'User not found. Please relog' });
         }
 
-        const newUser = await User.findOne({ username: newUsername });
+        if (currentUser.password !== oldPassword) return res.status(401).json({ message: 'The old password is incorrect' });
 
-        if (newUser) {
-            return res.status(409).json({ message: 'New username already in use' });
-        }
-
-        currentUser.username = newUsername;
+        currentUser.password = newPassword;
         await currentUser.save();
 
-        res.status(200).json({ message: 'Username changed successfully' });
+        res.status(200).json({ message: 'Password changed successfully' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
