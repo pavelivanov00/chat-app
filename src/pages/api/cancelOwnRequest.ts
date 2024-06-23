@@ -7,16 +7,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(405).json({ message: 'Method not allowed' });
     }
 
-    const { requester, id } = req.body;
+    const { requesterID, requestID } = req.body;
 
-    if (!id) {
-        return res.status(400).json({ message: 'Can not find id' });
+    if (!requesterID || !requestID) {
+        return res.status(400).json({ message: 'Missing required query parameters requesterID or requestID' });
     }
 
     try {
         await connectToDatabase();
 
-        const requests = await FriendRequest.deleteOne({ requester: requester, status: 'pending', _id: id });
+        const requests = await FriendRequest.deleteOne(
+            {
+                requesterID: requesterID,
+                status: 'pending', _id: requestID
+            }
+        );
 
         res.status(200).json({ message: 'Request canceled' });
     } catch (error) {

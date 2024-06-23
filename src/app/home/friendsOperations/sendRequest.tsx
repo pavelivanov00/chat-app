@@ -1,14 +1,14 @@
 "use client"
 import React, { ChangeEvent, useState } from "react";
-import { LeftContainerContent } from "./enumLeftContainer";
 import "./css/sendRequest.css";
+import { ObjectId } from "mongoose";
 
 type SendRequestProps = {
     requester: string;
-    setContent: React.Dispatch<React.SetStateAction<LeftContainerContent>>;
+    requesterID: ObjectId;
 }
 
-const SendRequest: React.FC<SendRequestProps> = ({ requester, setContent }) => {
+const SendRequest: React.FC<SendRequestProps> = ({ requester, requesterID }) => {
     const [recipient, setRecipient] = useState<string>('');
     const [responseMessage, setResponseMessage] = useState('');
     const [responseStatus, setResponseStatus] = useState('');
@@ -26,7 +26,7 @@ const SendRequest: React.FC<SendRequestProps> = ({ requester, setContent }) => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    requester: requester,
+                    requesterID: requesterID,
                     recipient: recipient
                 })
             });

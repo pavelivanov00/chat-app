@@ -11,9 +11,16 @@ import { RightContainerContent } from "./enumRightContainer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../../lib/fontawesome';
 import "./home.css";
+import { ObjectId } from 'mongoose';
+
+type User = {
+    email: string;
+    username: string;
+    userID: ObjectId;
+};
 
 export default function Home() {
-    const [user, setUser] = useState<{ email: string; username: string }>();
+    const [user, setUser] = useState<User>();
     const [numberOfMessages, setNumberOfMessages] = useState<number>(0);
 
     const [leftContainerContent, setLeftContainerContent] =
@@ -33,16 +40,24 @@ export default function Home() {
                 },
                 body: JSON.stringify({ username })
             });
+            console.log(username + "'s last online updated")
         } catch (error) {
             console.error('Error updating last online time:', error);
         }
     };
+ 
+    const setUserAndUpdateUserLastOnline = (cookies: any) => {
+        const parsedUser = JSON.parse(cookies.user);
+    
+        setUser(parsedUser);
+        updateUserLastOnline(parsedUser.username);
+    } 
 
     useEffect(() => {
         const cookies = parse(document.cookie);
 
         if (cookies.user) {
-            setUser(JSON.parse(cookies.user));
+            setUserAndUpdateUserLastOnline(cookies);
         }
     }, []);
 
@@ -50,7 +65,6 @@ export default function Home() {
         if (user) {
             const intervalId = setInterval(() => {
                 updateUserLastOnline(user.username);
-                console.log(user.username + "'s last online updated")
             }, 60000);
 
             return () => clearInterval(intervalId);
@@ -95,25 +109,44 @@ export default function Home() {
                 </div>
                 <div className="friendsContainer">
                     {leftContainerContent === LeftContainerContent.friends &&
-                        <FriendsComponent username={user.username} setContent={setRightContainerContent}
-                            setChatWindowFriend={setChatWindowFriend} />}
+                        <FriendsComponent
+                            userID={user.userID}
+                            username={user.username}
+                            setContent={setRightContainerContent}
+                            setChatWindowFriend={setChatWindowFriend}
+                        />
+                    }
                     {leftContainerContent === LeftContainerContent.sendRequest &&
-                        <SendRequest requester={user.username} setContent={setLeftContainerContent} />}
+                        <SendRequest
+                            requesterID={user.userID}
+                            requester={user.username}
+                        />
+                    }
+
                     {leftContainerContent === LeftContainerContent.pending &&
-                        <PendingRequests requester={user.username} />}
+                        <PendingRequests
+                            userID={user.userID}
+                            requester={user.username}
+                        />
+                    }
                     {leftContainerContent === LeftContainerContent.settings &&
-                        <Settings user={user.username} />}
+                        <Settings
+                            userID={user.userID}
+                            user={user.username}
+                        />
+                    }
                 </div>
             </div>
             <div className="greetContainer">
                 {rightContainerContent === RightContainerContent.greet &&
                     <>
                         <h1>Hi, {user.username}!</h1>
-                        <div>You have {numberOfMessages} new messages.</div>
+                        {/* <div>You have {numberOfMessages} new messages.</div> */}
+
                     </>
                 }
                 {rightContainerContent === RightContainerContent.chatWindow &&
-                    <ChatWindow receiver={chatWindowFriend!} sender={user.username} />}
+                    <ChatWindow receiver={chatWindowFriend!} senderID={user.userID} />}
             </div>
         </div>
     );

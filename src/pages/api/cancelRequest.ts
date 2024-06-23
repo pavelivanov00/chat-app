@@ -7,10 +7,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(405).json({ message: 'Method not allowed' });
     }
 
-    const { recipient, requester } = req.body;
+    const { recipientID, requesterID } = req.body;
 
-    if (!recipient || !requester) {
-        return res.status(400).json({ message: 'Something went wrong' });
+    if (!recipientID || !requesterID) {
+        return res.status(400).json({ message: 'Missing required query parameters recipientID or requesterID' });
     }
 
     try {
@@ -18,8 +18,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const updateRequest = await FriendRequest.updateOne(
             {
-                recipient: recipient,
-                requester: requester,
+                recipientID: recipientID,
+                requesterID: requesterID,
                 status: 'pending',
             },
             {
@@ -35,5 +35,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
-    } 
+    }
 }

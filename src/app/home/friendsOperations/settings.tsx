@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import "./css/settings.css"
 import { ChangeEvent, useState } from 'react';
+import { ObjectId } from 'mongoose';
 
 type SettingsProps = {
     user: string;
-
+    userID: ObjectId
 }
 
-const Settings: React.FC<SettingsProps> = ({ user }) => {
+const Settings: React.FC<SettingsProps> = ({ user, userID }) => {
     const [toggleChangeUsername, setToggleChangeUsername] = useState<boolean>(false);
     const [toggleChangePassword, setToggleChangePassword] = useState<boolean>(false);
 

@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required' });
+    return res.status(400).json({ message: 'Missing required query parameters email or password' });
   }
 
   try {
@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Set a cookie with user information
-    const userData = { userId: user._id, email: user.email, username: user.username };
+    const userData = { userID: user._id, email: user.email, username: user.username };
     res.setHeader('Set-Cookie', serialize('user', JSON.stringify(userData), {
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',

@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 const FriendRequestSchema = new mongoose.Schema({
-  requester: { type: String, required: true },
-  recipient: { type: String, required: true },
+  requesterID: { type: mongoose.Schema.Types.ObjectId, required: true },
+  recipientID: { type: mongoose.Schema.Types.ObjectId, required: true },
   status: { type: String, enum: ['pending', 'accepted', 'canceled'], default: 'pending' },
 }, { collection: 'friend requests' });
 

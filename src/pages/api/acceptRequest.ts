@@ -9,10 +9,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(405).json({ message: 'Method not allowed' });
     }
 
-    const { recipient, requester } = req.body;
+    const { recipientID, requesterID } = req.body;
 
-    if (!recipient || !requester) {
-        return res.status(400).json({ message: 'Something went wrong' });
+    if (!recipientID || !requesterID) {
+        return res.status(400).json({ message: 'Missing required query parameters recipientID or requesterID' });
     }
 
     const session = await mongoose.startSession();
@@ -23,8 +23,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const updateRequest = await FriendRequest.updateOne(
             {
-                recipient: recipient,
-                requester: requester,
+                recipientID: recipientID,
+                requesterID: requesterID,
                 status: 'pending',
             },
             {
@@ -38,8 +38,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const existingFriendship = await Friendship.findOne({
             $or: [
-                { friendship: [recipient, requester] },
-                { friendship: [requester, recipient] }
+                { friendship: [recipientID, requesterID] },
+                { friendship: [requesterID, recipientID] }
             ]
         }).session(session);
 
@@ -47,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             throw new Error('Users are already friends.');
         }
 
-        const newFriendship = new Friendship({ friendship: [requester, recipient] });
+        const newFriendship = new Friendship({ friendship: [requesterID, recipientID] });
         await newFriendship.save({ session });
 
         await session.commitTransaction();

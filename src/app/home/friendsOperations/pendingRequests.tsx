@@ -5,22 +5,23 @@ import "./css/pendingRequests.css";
 
 type PendingRequestsProps = {
   requester: string;
+  userID: ObjectId;
 };
 
 type Request = {
-  recipient?: string;
-  _id?: ObjectId;
+  recipientUsername?: string;
+  requestID?: ObjectId;
 };
 
-const PendingRequests: React.FC<PendingRequestsProps> = ({ requester }) => {
+const PendingRequests: React.FC<PendingRequestsProps> = ({ requester, userID }) => {
   const [pendingRequests, setPendingRequests] = useState<Request[]>([]);
 
   const fetchPendingRequests = useCallback(async () => {
     try {
-      const response = await fetch(`/api/pendingRequests?requester=${requester}`);
+      const response = await fetch(`/api/pendingRequests?requesterID=${userID}`);
       const data = await response.json();
       if (response.ok) {
-        setPendingRequests(data.requests);
+        setPendingRequests(data.requestIDsAndUsername);
       } else {
         console.error("Error fetching requests:", data.message);
       }
@@ -33,7 +34,7 @@ const PendingRequests: React.FC<PendingRequestsProps> = ({ requester }) => {
     fetchPendingRequests();
   }, [fetchPendingRequests]);
 
-  const handleCancelOwnRequest = async (id: ObjectId) => {
+  const handleCancelOwnRequest = async (requestID: ObjectId) => {
     try {
       const response = await fetch("/api/cancelOwnRequest", {
         method: "POST",
@@ -41,8 +42,8 @@ const PendingRequests: React.FC<PendingRequestsProps> = ({ requester }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          requester: requester,
-          id: id,
+          requesterID: userID,
+          requestID: requestID,
         }),
       });
       const data = await response.json();
@@ -59,20 +60,26 @@ const PendingRequests: React.FC<PendingRequestsProps> = ({ requester }) => {
 
   return (
     <>
-      <>Pending Requests:</>
-      <div className="pendingRequestsContainer">
-        {pendingRequests.map(request => (
-          <div className="pendingRequest" key={request._id!.toString()}>
-            <div>{request.recipient}</div>
-            <button
-              className="cancelRequest"
-              onClick={() => handleCancelOwnRequest(request._id!)}
-            >
-              X
-            </button>
+      {(pendingRequests.length !== 0) ?
+        <>
+          <>Pending Requests:</>
+          <div className="pendingRequestsContainer">
+            {pendingRequests.map(request => (
+              <div className="pendingRequest" key={request.requestID!.toString()}>
+                <div>{request.recipientUsername}</div>
+                <button
+                  className="cancelRequest"
+                  onClick={() => handleCancelOwnRequest(request.requestID!)}
+                >
+                  X
+                </button>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+        :
+        <>No pending requests</>
+      }
     </>
   );
 };

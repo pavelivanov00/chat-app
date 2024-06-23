@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { username } = req.body;
 
     if (!username) {
-        return res.status(400).json({ message: 'Something went wrong' });
+        return res.status(400).json({ message: 'Missing required query parameter username' });
     }
 
     try {

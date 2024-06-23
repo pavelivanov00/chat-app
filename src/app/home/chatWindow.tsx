@@ -3,13 +3,14 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { ChangeEvent, useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import "./chatWindow.css";
+import { ObjectId } from 'mongoose';
 
 type ChatWindowProps = {
     receiver: string;
-    sender: string;
+    senderID: ObjectId;
 };
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
+const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, senderID }) => {
     const [message, setMessage] = useState<string>('');
     const [messageHistory, setMessageHistory] = useState<object[]>([]);
     const [receiverLastOnline, setReceiverLastOnline] = useState<Date>();
@@ -21,7 +22,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
     };
 
     useEffect(() => {
-        fetchMessages(receiver, sender);
+        fetchMessages(receiver, senderID);
         fetchLastOnline(receiver);
 
         ws.current = new WebSocket('ws://localhost:8080');
@@ -38,7 +39,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
         return () => {
             ws.current?.close();
         };
-    }, [receiver, sender]);
+    }, [receiver, senderID]);
 
     useEffect(() => {
         if (lastMessageRef.current) {
@@ -46,9 +47,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
         }
     }, [messageHistory]);
 
-    const fetchMessages = async (sender: string, receiver: string) => {
+    const fetchMessages = async (receiver: string, senderID: ObjectId ) => {
         try {
-            const response = await fetch(`/api/fetchMessages?sender=${sender}&receiver=${receiver}`);
+            const response = await fetch(`/api/fetchMessages?senderID=${senderID}&receiver=${receiver}`);
             const data = await response.json();
             if (response.ok) {
                 setMessageHistory(data.messages);
@@ -62,7 +63,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
 
     const handleSendMessage = async () => {
         if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-            const newMessage = { receiver, sender, message, timestamp: new Date() };
+            const newMessage = { receiver, senderID, message, timestamp: new Date() };
             const jsonString = JSON.stringify(newMessage);
             ws.current.send(jsonString);
 
@@ -168,7 +169,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, sender }) => {
                     {messageHistory.map((msg, index) => (
                         <div
                             key={index}
-                            className={`chatMessage ${msg.sender === sender ? 'sent' : 'received'}`}
+                            className={`chatMessage ${msg.senderID === senderID ? 'sent' : 'received'}`}
                             ref={index === messageHistory.length - 1 ? lastMessageRef : null}
                         >
                             <div className="messageTimestamp">{formatMessageTimestamp(msg.timestamp)}</div>

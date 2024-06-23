@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import connectToDatabase from '../../lib/mongoose';
 import Message from '../../models/Message';
+import User from '../../models/User';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') {
@@ -9,16 +10,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await connectToDatabase();
 
-    const { sender, receiver, message } = req.body;
+    const { senderID, receiver, message } = req.body;
 
-    if (!sender || !receiver || !message) {
-        return res.status(400).json({ message: 'Missing required fields' });
+    if (!senderID || !receiver || !message) {
+        return res.status(400).json({ message: 'Missing required query parameters senderID, receiver or message' });
     }
 
     try {
+        const receiverQuery = await User.findOne({ username: receiver }).select('_id');
+        const receiverID = receiverQuery ? receiverQuery._id : null;
+
         const newMessage = new Message({
-            sender,
-            receiver,
+            senderID,
+            receiverID,
             message
         });
 

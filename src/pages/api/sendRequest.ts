@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import mongoose from 'mongoose';
 import connectToDatabase from '../../lib/mongoose';
 import User from '../../models/User';
 import FriendRequest from '../../models/FriendRequest';
@@ -7,43 +8,48 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method !== 'POST') {
         return res.status(405).json({ message: 'Method not allowed' });
     }
-    const { requester, recipient } = req.body;
+    const { requesterID, recipient } = req.body;
 
-    if (!requester || !recipient) {
-        return res.status(400).json({ message: 'Requester and recipient are required' });
+    if (!requesterID || !recipient) {
+        return res.status(400).json({ message: 'Missing required query parameters requesterID or recipient' });
     }
-    if (requester === recipient) {
-        return res.status(400).json({ message: "You can't add yourself" });
-    }
+
     try {
         await connectToDatabase();
 
         const existingRecipient = await User.findOne({ username: recipient });
+
         if (!existingRecipient) {
             return res.status(404).json({ message: 'User not found' });
+        }
+
+        const recipientID = existingRecipient._id;
+
+        if (requesterID == recipientID) {
+            return res.status(400).json({ message: "You can't add yourself" });
         }
 
         const existingRequest = await FriendRequest.findOne(
             {
                 $or: [
                     {
-                        requester: requester,
-                        recipient: recipient,
+                        requesterID: requesterID,
+                        recipientID: recipientID,
                         status: "pending"
                     },
                     {
-                        requester: requester,
-                        recipient: recipient,
+                        requesterID: requesterID,
+                        recipientID: recipientID,
                         status: "accepted"
                     },
                     {
-                        requester: recipient,
-                        recipient: requester,
+                        requesterID: recipientID,
+                        recipientID: requesterID,
                         status: "pending"
                     },
                     {
-                        requester: recipient,
-                        recipient: requester,
+                        requesterID: recipientID,
+                        recipientID: requesterID,
                         status: "accepted"
                     }
                 ]
@@ -54,8 +60,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const friendRequest = new FriendRequest({
-            requester: requester,
-            recipient: recipient,
+            requesterID: requesterID,
+            recipientID: recipientID,
             status: 'pending'
         });
         await friendRequest.save();

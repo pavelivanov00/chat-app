@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { receiver } = req.query;
 
     if (!receiver) {
-        return res.status(400).json({ message: 'Missing required query parameters' });
+        return res.status(400).json({ message: 'Missing required query parameter receiver' });
     }
 
     try {

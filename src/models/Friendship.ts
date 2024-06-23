@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const FriendshipSchema = new mongoose.Schema({
-  friendship: { type: [String], required: true },
+  friendship: { type: [mongoose.Schema.Types.ObjectId], required: true },
 }, {
   timestamps: true,
 });

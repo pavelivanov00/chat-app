@@ -7,25 +7,27 @@ import { RightContainerContent } from "../enumRightContainer";
 
 type FriendsComponentProps = {
     username: string;
-    setContent: React.Dispatch<React.SetStateAction<RightContainerContent>>; 
-    setChatWindowFriend: React.Dispatch<React.SetStateAction<string | null>>; 
+    userID: ObjectId;
+    setContent: React.Dispatch<React.SetStateAction<RightContainerContent>>;
+    setChatWindowFriend: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 type FriendRequest = {
-    requester: string;
-    _id: ObjectId;
+    requestID: ObjectId;
+    requesterUsername: string;
+    requesterID: ObjectId;
 }
 
-const FriendsComponent: React.FC<FriendsComponentProps> = ({ username, setContent, setChatWindowFriend }) => {
+const FriendsComponent: React.FC<FriendsComponentProps> = ({ username, userID, setContent, setChatWindowFriend }) => {
     const [friendships, setFriendships] = useState<string[]>([]);
     const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
 
     const fetchFriendships = useCallback(async () => {
         try {
-            const response = await fetch(`/api/fetchFriendships?name=${username}`);
+            const response = await fetch(`/api/fetchFriendships?userID=${userID}`);
             const data = await response.json();
             if (response.ok) {
-                setFriendships(data.friends);
+                setFriendships(data.friendsUsernames);
             } else {
                 console.error("Error fetching friendships:", data.message);
             }
@@ -36,10 +38,10 @@ const FriendsComponent: React.FC<FriendsComponentProps> = ({ username, setConten
 
     const fetchFriendRequests = useCallback(async () => {
         try {
-            const response = await fetch(`/api/fetchFriendRequests?recipient=${username}`);
+            const response = await fetch(`/api/fetchFriendRequests?userID=${userID}`);
             const data = await response.json();
             if (response.ok) {
-                setFriendRequests(data.requests);
+                setFriendRequests(data.requestIDAndRequesterInfo);
             } else {
                 console.error("Error fetching requests:", data.message);
             }
@@ -53,7 +55,7 @@ const FriendsComponent: React.FC<FriendsComponentProps> = ({ username, setConten
         fetchFriendRequests();
     }, [fetchFriendships, fetchFriendRequests]);
 
-    const handleAcceptRequest = async (requester: string) => {
+    const handleAcceptRequest = async (requesterID: ObjectId) => {
         try {
             const response = await fetch("/api/acceptRequest", {
                 method: "POST",
@@ -61,8 +63,8 @@ const FriendsComponent: React.FC<FriendsComponentProps> = ({ username, setConten
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    recipient: username,
-                    requester: requester,
+                    recipientID: userID,
+                    requesterID: requesterID,
                 }),
             });
             const data = await response.json();
@@ -78,7 +80,7 @@ const FriendsComponent: React.FC<FriendsComponentProps> = ({ username, setConten
         }
     };
 
-    const handleCancelRequest = async (requester: string) => {
+    const handleCancelRequest = async (requesterID: ObjectId) => {
         try {
             const response = await fetch("/api/cancelRequest", {
                 method: "POST",
@@ -86,8 +88,8 @@ const FriendsComponent: React.FC<FriendsComponentProps> = ({ username, setConten
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    recipient: username,
-                    requester: requester,
+                    recipientID: userID,
+                    requesterID: requesterID,
                 }),
             });
             const data = await response.json();
@@ -105,12 +107,15 @@ const FriendsComponent: React.FC<FriendsComponentProps> = ({ username, setConten
 
     return (
         <>
-            <FriendRequests 
-                friendRequests={friendRequests} 
+            <FriendRequests
+                friendRequests={friendRequests}
                 onAcceptRequest={handleAcceptRequest}
-                onCancelRequest={handleCancelRequest}  
+                onCancelRequest={handleCancelRequest}
             />
-            <Friendships friendships={friendships} setContent={setContent} setChatWindowFriend={setChatWindowFriend} />
+            <Friendships
+                friendships={friendships}
+                setContent={setContent}
+                setChatWindowFriend={setChatWindowFriend} />
         </>
     );
 }
