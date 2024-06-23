@@ -5,9 +5,9 @@
 
 .friend {
     height: 3rem;
-    /* margin-left: 1.5rem; */
     padding-left: 1.5rem;
-    display: flex;
+    padding-right:1rem;
+    text-align: left;
     align-items: center;
     background-color: rgb(42, 44, 45);
     color: rgb(255, 255, 255);
@@ -15,6 +15,9 @@
     cursor: pointer;
     width: 100%;
     font-size: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .friend:hover {

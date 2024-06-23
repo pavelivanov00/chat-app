@@ -3,7 +3,7 @@
     flex-direction: column;
 }
 
-.changeUsernameContainer {
+.container {
     margin-bottom: 2rem;
 }
 
@@ -15,10 +15,6 @@
 .changeResponseFail {
     margin-top: 1rem;
     color: rgb(250, 128, 128);
-}
-
-.changePasswordContainer {
-    margin-bottom: 2rem;
 }
 
 .settingsButton {
@@ -39,8 +35,7 @@
     background-color: rgb(42, 44, 45);
 }
 
-.changePasswordInput,
-.changeUsernameInput {
+.inputField {
     width: 100%;
     height: 2.5rem;
     padding: 8px;
@@ -54,8 +49,7 @@
     margin-top: 0.5rem;
 }
 
-.changePasswordInput::placeholder,
-.changeUsernameInput::placeholder {
+.inputField::placeholder {
     color: rgb(255, 255, 255);
     opacity: 0.75;
 }

@@ -18,8 +18,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const currentUser = await User.findOne({ username: currentUsername });
 
+        if (currentUsername === currentUser.username) return res.status(409).json({
+            message: 'The new username cannot be the same as the current username'
+        });
+
         if (!currentUser) {
-            return res.status(404).json({ message: 'User not found. Please relog' });
+            return res.status(404).json({ message: 'User not found' });
         }
 
         const newUser = await User.findOne({ username: newUsername });

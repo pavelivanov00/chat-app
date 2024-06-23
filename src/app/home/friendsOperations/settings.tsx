@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import "./css/settings.css"
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { ObjectId } from 'mongoose';
 
 type SettingsProps = {
@@ -11,23 +11,35 @@ type SettingsProps = {
 const Settings: React.FC<SettingsProps> = ({ user, userID }) => {
     const [toggleChangeUsername, setToggleChangeUsername] = useState<boolean>(false);
     const [toggleChangePassword, setToggleChangePassword] = useState<boolean>(false);
+    const [toggleChangeEmail, setToggleChangeEmail] = useState<boolean>(false);
 
     const [newUsername, setNewUsername] = useState<string>('');
     const [oldPassword, setOldPassword] = useState<string>('');
     const [newPassword, setNewPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
+    const [oldEmail, setOldEmail] = useState<string>('');
+    const [newEmail, setNewEmail] = useState<string>('');
 
     const [usernameResponse, setUsernameResponse] = useState<string>('')
     const [passwordResponse, setPasswordResponse] = useState<string>('')
+    const [emailResponse, setEmailResponse] = useState<string>('')
 
     const handleToggleChangeUsername = () => {
         setToggleChangeUsername(prevState => !prevState);
         setToggleChangePassword(false);
+        setToggleChangeEmail(false);
     };
 
     const handleToggleChangePassword = () => {
         setToggleChangePassword(prevState => !prevState);
         setToggleChangeUsername(false);
+        setToggleChangeEmail(false);
+    };
+
+    const handleToggleChangeEmail = () => {
+        setToggleChangeEmail(prevState => !prevState);
+        setToggleChangeUsername(false);
+        setToggleChangePassword(false);
     };
 
     const handleChangeUsername = async () => {
@@ -48,7 +60,7 @@ const Settings: React.FC<SettingsProps> = ({ user, userID }) => {
         } catch (error) {
             console.error("Error changing username:", error);
         }
-    }
+    };
 
     const handleChangePassword = async () => {
         if (newPassword !== confirmPassword) return setPasswordResponse("Passwords do not match")
@@ -70,7 +82,32 @@ const Settings: React.FC<SettingsProps> = ({ user, userID }) => {
         } catch (error) {
             console.error("Error changing username:", error);
         }
-    }
+    };
+
+    const handleChangeEmail = async () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(newEmail) || !emailRegex.test(oldEmail)) return setEmailResponse("Email is not valid");
+        
+        if (oldEmail === newEmail) return setEmailResponse("The emails are the same");
+
+        try {
+            const response = await fetch("/api/changeEmail", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    oldEmail: oldEmail,
+                    newEmail: newEmail,
+                }),
+            });
+            const data = await response.json();
+
+            setEmailResponse(data.message);
+        } catch (error) {
+            console.error("Error changing username:", error);
+        }
+    };
 
     return (
         <div className='settings'>
@@ -82,7 +119,7 @@ const Settings: React.FC<SettingsProps> = ({ user, userID }) => {
             </button>
 
             {toggleChangeUsername &&
-                <div className='changeUsernameContainer'>
+                <div className='container'>
                     <input
                         type="text"
                         name="newUsername"
@@ -90,7 +127,7 @@ const Settings: React.FC<SettingsProps> = ({ user, userID }) => {
                         value={newUsername}
                         onChange={(event) => setNewUsername(event.target.value)}
                         placeholder="New username"
-                        className="changeUsernameInput"
+                        className="inputField"
                     />
                     <button
                         className="settingsButton"
@@ -115,7 +152,7 @@ const Settings: React.FC<SettingsProps> = ({ user, userID }) => {
             </button>
 
             {toggleChangePassword &&
-                <div className='changePasswordContainer'>
+                <div className='container'>
                     <input
                         type="password"
                         name="oldPassword"
@@ -123,7 +160,7 @@ const Settings: React.FC<SettingsProps> = ({ user, userID }) => {
                         value={oldPassword}
                         onChange={(event) => setOldPassword(event.target.value)}
                         placeholder="Old password"
-                        className="changePasswordInput"
+                        className="inputField"
                     />
                     <input
                         type="password"
@@ -131,7 +168,7 @@ const Settings: React.FC<SettingsProps> = ({ user, userID }) => {
                         value={newPassword}
                         onChange={(event) => setNewPassword(event.target.value)}
                         placeholder="New password"
-                        className="changePasswordInput"
+                        className="inputField"
                     />
                     <input
                         type="password"
@@ -139,7 +176,7 @@ const Settings: React.FC<SettingsProps> = ({ user, userID }) => {
                         value={confirmPassword}
                         onChange={(event) => setConfirmPassword(event.target.value)}
                         placeholder="Confirm new password"
-                        className="changePasswordInput"
+                        className="inputField"
                     />
                     <button
                         className="settingsButton"
@@ -155,6 +192,48 @@ const Settings: React.FC<SettingsProps> = ({ user, userID }) => {
                     }
                 </div>
             }
+
+            <button
+                className="settingsButton"
+                onClick={handleToggleChangeEmail}
+            >
+                Change email
+            </button>
+
+            {toggleChangeEmail &&
+                <div className='container'>
+                    <input
+                        type="email"
+                        name="email"
+                        autoComplete="new-email"
+                        value={oldEmail}
+                        onChange={(event) => setOldEmail(event.target.value)}
+                        placeholder="Current email"
+                        className="inputField"
+                    />
+                    <input
+                        type="email"
+                        name="newEmail"
+                        value={newEmail}
+                        onChange={(event) => setNewEmail(event.target.value)}
+                        placeholder="New email"
+                        className="inputField"
+                    />
+                    <button
+                        className="settingsButton"
+                        onClick={handleChangeEmail}
+                    >
+                        Confirm
+                    </button>
+                    {emailResponse &&
+                        <div
+                            className={(emailResponse === "Email changed successfully") ? "changeResponseOK" : "changeResponseFail"}>
+                            {emailResponse}
+                        </div>
+                    }
+                </div>
+            }
+
             <Link href="/" className='logOut'>Log out</Link>
         </div>
     )

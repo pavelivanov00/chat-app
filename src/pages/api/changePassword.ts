@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const currentUser = await User.findOne({ username: username });
 
         if (!currentUser) {
-            return res.status(404).json({ message: 'User not found. Please relog' });
+            return res.status(404).json({ message: 'User not found' });
         }
 
         if (currentUser.password !== oldPassword) return res.status(401).json({ message: 'The old password is incorrect' });
