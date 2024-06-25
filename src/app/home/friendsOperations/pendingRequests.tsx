@@ -62,11 +62,18 @@ const PendingRequests: React.FC<PendingRequestsProps> = ({ requester, userID }) 
     <>
       {(pendingRequests.length !== 0) ?
         <>
-          <>Pending Requests:</>
-          <div className="pendingRequestsContainer">
-            {pendingRequests.map(request => (
-              <div className="pendingRequest" key={request.requestID!.toString()}>
-                <div>{request.recipientUsername}</div>
+          <div className="pendingRequestsLabel">Pending Requests:</div>
+          <>
+            {pendingRequests.map((request, index) => (
+              <div
+                className="pendingRequest"
+                key={request.requestID!.toString()}
+                style={{
+                  borderTop: '2px solid rgb(95, 97, 97)',
+                  borderBottom: index === pendingRequests.length - 1 ? '2px solid rgb(95, 97, 97)' : 'none'
+                }}
+              >
+                <div className="recipientUsername">{request.recipientUsername}</div>
                 <button
                   className="cancelRequest"
                   onClick={() => handleCancelOwnRequest(request.requestID!)}
@@ -75,7 +82,7 @@ const PendingRequests: React.FC<PendingRequestsProps> = ({ requester, userID }) 
                 </button>
               </div>
             ))}
-          </div>
+          </>
         </>
         :
         <>No pending requests</>

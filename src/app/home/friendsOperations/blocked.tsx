@@ -34,47 +34,52 @@ const Blocked: React.FC<BlockedProps> = ({ blockerID }) => {
         fetchBlockedUsers();
     }, [fetchBlockedUsers]);
 
-      const handleUnblockUser = async (blockID: ObjectId) => {
+    const handleUnblockUser = async (blockID: ObjectId) => {
         try {
-          const response = await fetch("/api/unblockUser", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              blockID,
-            }),
-          });
-          const data = await response.json();
+            const response = await fetch("/api/unblockUser", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    blockID,
+                }),
+            });
+            const data = await response.json();
 
-          if (response.ok) {
-            fetchBlockedUsers();
-          } else {
-            console.error(data.response);
-          }
+            if (response.ok) {
+                fetchBlockedUsers();
+            } else {
+                console.error(data.response);
+            }
         } catch (error) {
-          console.error("Error while unblocking user:", error);
+            console.error("Error while unblocking user:", error);
         }
-      };
+    };
 
     return (
         <>
             {(blockedUsers.length !== 0) ?
                 <>
-                    <>Blocked users:</>
-                    <div className="">
-                        {blockedUsers.map(block => (
-                            <div className="blockFlexbox" key={block.blockID!.toString()}>
-                                <div>{block.blockedUsername}</div>
-                                <button
-                                    className="cancelBlock"
-                                    onClick={() => handleUnblockUser(block.blockID!)}
-                                >
-                                    X
-                                </button>
-                            </div>
-                        ))}
-                    </div>
+                    <div className="blockedUsersLabel">Blocked users:</div>
+                    {blockedUsers.map((block, index) => (
+                        <div
+                            className="blockFlexbox"
+                            key={block.blockID!.toString()}
+                            style={{
+                                borderTop: '2px solid rgb(95, 97, 97)',
+                                borderBottom: index === blockedUsers.length - 1 ? '2px solid rgb(95, 97, 97)' : 'none'
+                            }}
+                        >
+                            <div className="blockedUsername">{block.blockedUsername}</div>
+                            <button
+                                className="unblockButton"
+                                onClick={() => handleUnblockUser(block.blockID!)}
+                            >
+                                X
+                            </button>
+                        </div>
+                    ))}
                 </>
                 :
                 <>No blocked users</>
