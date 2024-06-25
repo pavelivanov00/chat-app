@@ -1,12 +1,62 @@
-.chatWindowFriend {
+.friendContainer {
+    display: flex;
+    flex-direction: row;
+    height:10%;
+    border-bottom: 2px solid rgb(0, 0, 0);
+}
+
+.friendFlexbox {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     font-size: 140%;
     width: 100%;
-    border-bottom: 2px solid rgb(0, 0, 0);
-    height: 10%;
+}
+
+.settingsFlexbox {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 60px;
+}
+
+.friendSettings {
+    background-color: rgb(42, 44, 45);
+    color: rgb(255, 255, 255);
+    border: none;
+    border-top: none;
+    cursor: pointer;
+    font-size: 150%;
+    white-space: nowrap;
+    width: 100%;
+    text-align: right;
+    padding-top: 4px;
+    padding-right: 8px;
+}
+
+.friendSettings:hover {
+    background-color: rgb(62, 65, 66);
+}
+
+.blockUser {
+    background-color: rgb(42, 44, 45);
+    color: rgb(235, 61, 61);
+    border: none;
+    cursor: pointer;
+    font-size: 100%;
+    white-space: nowrap;
+    padding: 8px 6px 8px 6px;
+    width: 100%;
+}
+
+.blockUser:hover {
+    background-color: rgb(62, 65, 66);
 }
 
 .lastOnlineStatus {
-    font-size: 80%;
+    margin-bottom: 6px;
+    font-size: 70%;
     color: rgb(201, 201, 201);
 }
 

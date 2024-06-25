@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../../lib/fontawesome';
 import "./home.css";
 import { ObjectId } from 'mongoose';
+import Blocked from './friendsOperations/blocked';
 
 type User = {
     email: string;
@@ -45,13 +46,13 @@ export default function Home() {
             console.error('Error updating last online time:', error);
         }
     };
- 
+
     const setUserAndUpdateUserLastOnline = (cookies: any) => {
         const parsedUser = JSON.parse(cookies.user);
-    
+
         setUser(parsedUser);
         updateUserLastOnline(parsedUser.username);
-    } 
+    }
 
     useEffect(() => {
         const cookies = parse(document.cookie);
@@ -97,7 +98,10 @@ export default function Home() {
                     >
                         <FontAwesomeIcon icon="fa-solid fa-hourglass-half" />
                     </button>
-                    <button className="friendButton colorRed">
+                    <button
+                        className="friendButton colorRed"
+                        onClick={() => setLeftContainerContent(LeftContainerContent.blocked)}
+                    >
                         <FontAwesomeIcon icon="fa-solid fa-ban" />
                     </button>
                     <button
@@ -122,7 +126,11 @@ export default function Home() {
                             requester={user.username}
                         />
                     }
-
+                    {leftContainerContent === LeftContainerContent.blocked &&
+                        <Blocked
+                            blockerID={user.userID}
+                        />
+                    }
                     {leftContainerContent === LeftContainerContent.pending &&
                         <PendingRequests
                             userID={user.userID}

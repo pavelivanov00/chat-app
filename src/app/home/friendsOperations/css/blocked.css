@@ -1,0 +1,19 @@
+.blockFlexbox {
+    display: flex;
+    flex-direction: row;
+}
+
+.cancelBlock {
+    margin-left: 1.5rem;
+    background-color: rgb(155, 25, 25);
+    padding: 6px 8px 4px 8px;
+    border-radius: 20px;
+    border: none;
+    color:rgb(236, 236, 236);
+    cursor: pointer;
+    font-size: 90%;
+}
+
+.cancelBlock:hover {
+    background-color: rgb(89, 10, 10);
+}

@@ -14,6 +14,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, senderID }) => {
     const [message, setMessage] = useState<string>('');
     const [messageHistory, setMessageHistory] = useState<object[]>([]);
     const [receiverLastOnline, setReceiverLastOnline] = useState<Date>();
+    const [showFriendSettings, setShowFriendSettings] = useState<boolean>(false);
+    const [blockUserResponse, setBlockUserResponse] = useState<string>('');
+
     const ws = useRef<WebSocket | null>(null);
     const lastMessageRef = useRef<HTMLDivElement | null>(null);
 
@@ -47,7 +50,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, senderID }) => {
         }
     }, [messageHistory]);
 
-    const fetchMessages = async (receiver: string, senderID: ObjectId ) => {
+    const fetchMessages = async (receiver: string, senderID: ObjectId) => {
         try {
             const response = await fetch(`/api/fetchMessages?senderID=${senderID}&receiver=${receiver}`);
             const data = await response.json();
@@ -156,13 +159,54 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, senderID }) => {
         }
     };
 
+    const handleBlockUser = async () => {
+        try {
+            const response = await fetch("/api/blockUser", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    blockerID: senderID,
+                    userToBeBlocked: receiver,
+                })
+            });
+            const data = await response.json();
+            alert(data.message);
+        } catch (error) {
+            console.error("Error while canceling request:", error);
+        }
+    }
+
     return (
         <>
-            <div className="chatWindowFriend">
-                {receiver}
-                <p className='lastOnlineStatus'>
-                    {formatLastOnline(receiverLastOnline!)}
-                </p>
+            <div className="friendContainer">
+                <div className="friendFlexbox">
+                    <>{receiver}</>
+                    <div className='lastOnlineStatus'>
+                        {formatLastOnline(receiverLastOnline!)}
+                    </div>
+                </div>
+
+                <div className='settingsFlexbox'>
+                    <button
+                        className="friendSettings"
+                        onClick={() => setShowFriendSettings(prevState => !prevState)}
+                    >
+                        <FontAwesomeIcon icon="fa-solid fa-ellipsis-vertical" />
+                    </button>
+                    {showFriendSettings &&
+                        <>
+                            <button
+                                className='blockUser'
+                                onClick={handleBlockUser}
+                            >
+                                Block
+                            </button>
+                        </>
+                    }
+                </div>
+
             </div>
             <div className="chatWindow">
                 <div className="chatHistory">
