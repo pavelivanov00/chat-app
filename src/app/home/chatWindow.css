@@ -186,3 +186,8 @@
     text-underline-offset: 4px;
     margin-bottom: 0.5rem;
 }
+
+.canNotSendMessage {
+    color: rgb(255, 132, 132);
+    text-align: right;
+}

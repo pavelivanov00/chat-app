@@ -154,7 +154,12 @@ export default function Home() {
                     </>
                 }
                 {rightContainerContent === RightContainerContent.chatWindow &&
-                    <ChatWindow receiver={chatWindowFriend!} senderID={user.userID} />}
+                    <ChatWindow
+                        receiverUsername={chatWindowFriend!}
+                        senderID={user.userID}
+                        senderUsername={user.username}
+                    />
+                }
             </div>
         </div>
     );

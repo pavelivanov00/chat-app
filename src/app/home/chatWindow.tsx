@@ -6,16 +6,18 @@ import "./chatWindow.css";
 import { ObjectId } from 'mongoose';
 
 type ChatWindowProps = {
-    receiver: string;
+    receiverUsername: string;
+    senderUsername: string;
     senderID: ObjectId;
 };
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, senderID }) => {
+const ChatWindow: React.FC<ChatWindowProps> = ({ receiverUsername, senderUsername, senderID }) => {
     const [message, setMessage] = useState<string>('');
     const [messageHistory, setMessageHistory] = useState<object[]>([]);
     const [receiverLastOnline, setReceiverLastOnline] = useState<Date>();
     const [showFriendSettings, setShowFriendSettings] = useState<boolean>(false);
-    const [blockUserResponse, setBlockUserResponse] = useState<string>('');
+
+    const [canNotSendMessage, setCanNotSendMessage] = useState<string>('');
 
     const ws = useRef<WebSocket | null>(null);
     const lastMessageRef = useRef<HTMLDivElement | null>(null);
@@ -25,11 +27,14 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, senderID }) => {
     };
 
     useEffect(() => {
-        fetchMessages(receiver, senderID);
-        fetchLastOnline(receiver);
+        fetchMessages(receiverUsername, senderID);
+        fetchLastOnline(receiverUsername);
 
         ws.current = new WebSocket('ws://localhost:8080');
-        ws.current.onopen = () => console.log('WebSocket connected');
+        ws.current.onopen = () => {
+            console.log('WebSocket connected');
+            ws.current?.send(JSON.stringify({ senderUsername }));
+        };
         ws.current.onmessage = (event) => {
             try {
                 const receivedMessage = JSON.parse(event.data);
@@ -42,7 +47,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, senderID }) => {
         return () => {
             ws.current?.close();
         };
-    }, [receiver, senderID]);
+    }, [receiverUsername, senderUsername, senderID]);
 
     useEffect(() => {
         if (lastMessageRef.current) {
@@ -50,9 +55,13 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, senderID }) => {
         }
     }, [messageHistory]);
 
-    const fetchMessages = async (receiver: string, senderID: ObjectId) => {
+    useEffect(() => {
+        setCanNotSendMessage('')
+    }, [receiverUsername]);
+
+    const fetchMessages = async (receiverUsername: string, senderID: ObjectId) => {
         try {
-            const response = await fetch(`/api/fetchMessages?senderID=${senderID}&receiver=${receiver}`);
+            const response = await fetch(`/api/fetchMessages?senderID=${senderID}&receiver=${receiverUsername}`);
             const data = await response.json();
             if (response.ok) {
                 setMessageHistory(data.messages);
@@ -66,7 +75,13 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, senderID }) => {
 
     const handleSendMessage = async () => {
         if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-            const newMessage = { receiver, senderID, message, timestamp: new Date() };
+            const newMessage = {
+                receiverUsername,
+                senderUsername,
+                message,
+                senderID,
+                timestamp: new Date()
+            };
             const jsonString = JSON.stringify(newMessage);
             ws.current.send(jsonString);
 
@@ -78,6 +93,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, senderID }) => {
                     headers: { 'Content-Type': 'application/json' },
                     body: jsonString,
                 });
+                const data = await response.json();
+                setCanNotSendMessage(data.message);
+
                 if (!response.ok) {
                     console.error('Error sending message:', await response.text());
                 }
@@ -89,9 +107,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, senderID }) => {
         }
     };
 
-    const fetchLastOnline = async (receiver: string) => {
+    const fetchLastOnline = async (receiverUsername: string) => {
         try {
-            const response = await fetch(`/api/fetchLastOnline?receiver=${receiver}`);
+            const response = await fetch(`/api/fetchLastOnline?receiver=${receiverUsername}`);
             const data = await response.json();
             if (response.ok) {
                 setReceiverLastOnline(data.lastOnline);
@@ -168,7 +186,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, senderID }) => {
                 },
                 body: JSON.stringify({
                     blockerID: senderID,
-                    userToBeBlocked: receiver,
+                    userToBeBlocked: receiverUsername,
                 })
             });
             const data = await response.json();
@@ -182,7 +200,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, senderID }) => {
         <>
             <div className="friendContainer">
                 <div className="friendFlexbox">
-                    <>{receiver}</>
+                    <>{receiverUsername}</>
                     <div className='lastOnlineStatus'>
                         {formatLastOnline(receiverLastOnline!)}
                     </div>
@@ -220,6 +238,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiver, senderID }) => {
                             <div className="messageContent">{msg.message}</div>
                         </div>
                     ))}
+                    {canNotSendMessage === 'The message could not be sent at this time' &&
+                        <div className="canNotSendMessage">
+                            The message could not be sent at this time
+                        </div>
+                    }
                 </div>
                 <div className="messageContainer">
                     <TextareaAutosize
