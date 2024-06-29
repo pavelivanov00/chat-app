@@ -16,6 +16,7 @@ type FormErrors = {
     password?: string;
     confirmPassword?: string;
     emailTaken?: string;
+    usernameTaken?: string;
 }
 
 export default function Register() {
@@ -64,10 +65,15 @@ export default function Register() {
                 });
 
                 const result = await response.json();
-                if (result.message === "Email already exists") setErrors({
-                    emailTaken: "Email already exists"
+
+                if (result.message === "Username is taken. Please use another") setErrors({
+                    usernameTaken: "Username is taken. Please use another"
                 });
 
+                if (result.message === "Email is taken. Please use another") setErrors({
+                    emailTaken: "Email is taken. Please use another"
+                });
+                
                 if (!response.ok) {
                     throw new Error('Failed to register');
                 }
@@ -108,8 +114,10 @@ export default function Register() {
                             onChange={handleChange}
                             placeholder="Username"
                             className="registerUsername"
+                            autoComplete="new-username"
                         />
                         {errors.username && <span className="error">{errors.username}</span>}
+                        {errors.usernameTaken && <span className="error">{errors.usernameTaken}</span>}
                     </div>
                     <div className="formElement">
                         <input
@@ -119,6 +127,7 @@ export default function Register() {
                             onChange={handleChange}
                             placeholder="Email"
                             className="registerEmail"
+                            autoComplete="new-email"
                         />
                         {errors.email && <span className="error">{errors.email}</span>}
                         {errors.emailTaken && <span className="error">{errors.emailTaken}</span>}
@@ -131,6 +140,7 @@ export default function Register() {
                             onChange={handleChange}
                             placeholder="Password"
                             className="registerPassword"
+                            autoComplete="new-password"
                         />
                         {errors.password && <span className="error">{errors.password}</span>}
                     </div>
@@ -142,6 +152,7 @@ export default function Register() {
                             onChange={handleChange}
                             placeholder="Confirm Password"
                             className="registerPassword"
+                            autoComplete="new-confirm-password"
                         />
                         {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
                     </div>
