@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
   },
   lastOnline: {
     type: Date,
-    default: Date.now,
+    default: null
   },
 }, {
   timestamps: true,

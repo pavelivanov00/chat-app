@@ -16,11 +16,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        const result = await User.find({ username: receiver });
-        console.log(result[0].lastOnline);
+        const result = await User.findOne({ username: receiver });
+
+        if (!result) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (!result.lastOnline) {
+            return res.status(204).end();
+        }
+        console.log(result.lastOnline);
         return res.status(200).json({
             message: 'Last online status queried successfully',
-            lastOnline: result[0].lastOnline
+            lastOnline: result.lastOnline
         });
     } catch (error) {
         return res.status(500).json({ message: 'Internal server error' });

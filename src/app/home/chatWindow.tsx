@@ -122,6 +122,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiverUsername, senderUsernam
     };
 
     const formatLastOnline = (lastOnlineDate: Date): string => {
+        if (!lastOnlineDate) return "last online: not available";
         const now = new Date();
         const diffMs = now.getTime() - new Date(lastOnlineDate).getTime();
         const diffSeconds = Math.floor(diffMs / 1000);
@@ -163,7 +164,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiverUsername, senderUsernam
                 return `${diffDays} days ago`;
             case (diffDays < 365):
                 const diffMonths = Math.floor(diffDays / 30);
-                return `${diffMonths} months ago`;
+                if (diffMonths === 1) return `a month ago`;
+                if (diffMonths > 1) return `${diffMonths} months ago`;
             default:
                 const diffYears = Math.floor(diffDays / 365);
                 return `${diffYears} years ago`;

@@ -16,9 +16,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         await connectToDatabase();
 
+        const isNewUsernameTaken = await User.findOne({ username: newUsername });
+
+        if (isNewUsernameTaken) return res.status(409).json({
+            message: 'The new username is taken. Please use another'
+        });
+
         const currentUser = await User.findOne({ username: currentUsername });
 
-        if (currentUsername === currentUser.username) return res.status(409).json({
+        if (newUsername === currentUser.username) return res.status(409).json({
             message: 'The new username cannot be the same as the current username'
         });
 

@@ -24,7 +24,7 @@ export default function Login() {
 
   const [errors, setErrors] = useState<loginFormErrors>({});
   const router = useRouter();
-  
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setLoginData({
@@ -62,7 +62,7 @@ export default function Login() {
             wrongCredentials: "Wrong email or password"
           });
         }
-        else router.push('/home'); 
+        else router.push('/home');
 
         if (!response.ok) {
           throw new Error('Failed to login');
@@ -80,38 +80,58 @@ export default function Login() {
   };
 
   return (
-    <div className="loginContainer">
-      <div className='welcomeHeading'> Welcome to Chatter.</div>
-      <div className='welcomeHeading marginBottom'>Start by logging in.</div>
-
-      <form onSubmit={handleLogin} className="loginForm">
-        <div className="loginFormElement">
-          <input
-            type="text"
-            name="email"
-            placeholder="Email"
-            className="loginEmail"
-            onChange={handleChange}
-          />
-          {errors.email && <span className="errorLogin">{errors.email}</span>}
-        </div>
-        <div className="loginFormElement">
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            className="loginPassword"
-            onChange={handleChange}
-          />
-          {errors.password && <span className="errorLogin">{errors.password}</span>}
-          {errors.wrongCredentials && <span className="errorLogin">{errors.wrongCredentials}</span>}
-        </div>
-        <button type="submit" className="loginButton">Log in</button>
-      </form>
-
-      <div className="registerHere">
-        Don't have an account? <Link href="/register">Sign up here.</Link>
+    <>
+      <div className="infoContainer">
+        You can test the app by either creating a new account or use this one:
+        <br />
+        email: example@email.com
+        <br />
+        pass: 1234
+        <br />
+        The websocket live chatting can be tested with two accounts each of them logged in a browser tab. Here is another:
+        <br />
+        email: fred@yahoo.com
+        <br />
+        pass: 1234
+        <br />
+        <br />
+        Technologies and libraries used: Next.js, TypeScript, MongoDB (with mongoose), WebSocket, FontAwesome.
+        <br /> 
+        The communication between the front-end and the back-end is handled by using HTTP methods through API calls.  
       </div>
-    </div>
+      <div className="loginContainer">
+        <div className='welcomeHeading'> Welcome to Chatter.</div>
+        <div className='welcomeHeading marginBottom'>Start by logging in.</div>
+
+        <form onSubmit={handleLogin} className="loginForm">
+          <div className="loginFormElement">
+            <input
+              type="text"
+              name="email"
+              placeholder="Email"
+              className="loginEmail"
+              onChange={handleChange}
+            />
+            {errors.email && <span className="errorLogin">{errors.email}</span>}
+          </div>
+          <div className="loginFormElement">
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              className="loginPassword"
+              onChange={handleChange}
+            />
+            {errors.password && <span className="errorLogin">{errors.password}</span>}
+            {errors.wrongCredentials && <span className="errorLogin">{errors.wrongCredentials}</span>}
+          </div>
+          <button type="submit" className="loginButton">Log in</button>
+        </form>
+
+        <div className="registerHere">
+          Don't have an account? <Link href="/register">Sign up here.</Link>
+        </div>
+      </div>
+    </>
   );
 }
