@@ -13,6 +13,7 @@ import '../../lib/fontawesome';
 import "./home.css";
 import { ObjectId } from 'mongoose';
 import Blocked from './friendsOperations/blocked';
+import { faBan, faGear, faUserGroup, faUserPlus, faHourglassHalf } from '@fortawesome/free-solid-svg-icons';
 
 type User = {
     email: string;
@@ -41,7 +42,6 @@ export default function Home() {
                 },
                 body: JSON.stringify({ username })
             });
-            console.log(username + "'s last online updated")
         } catch (error) {
             console.error('Error updating last online time:', error);
         }
@@ -84,31 +84,31 @@ export default function Home() {
                         className="friendButton colorBlue borderLeftNone"
                         onClick={() => setLeftContainerContent(LeftContainerContent.friends)}
                     >
-                        <FontAwesomeIcon icon="fa-solid fa-user-group" />
+                        <FontAwesomeIcon icon={faUserGroup} />
                     </button>
                     <button
                         className="friendButton colorGreen"
                         onClick={() => setLeftContainerContent(LeftContainerContent.sendRequest)}
                     >
-                        <FontAwesomeIcon icon="fa-solid fa-user-plus" />
+                        <FontAwesomeIcon icon={faUserPlus} />
                     </button>
                     <button
                         className="friendButton colorGray"
                         onClick={() => setLeftContainerContent(LeftContainerContent.pending)}
                     >
-                        <FontAwesomeIcon icon="fa-solid fa-hourglass-half" />
+                        <FontAwesomeIcon icon={faHourglassHalf} />
                     </button>
                     <button
                         className="friendButton colorRed"
                         onClick={() => setLeftContainerContent(LeftContainerContent.blocked)}
                     >
-                        <FontAwesomeIcon icon="fa-solid fa-ban" />
+                        <FontAwesomeIcon icon={faBan} />
                     </button>
                     <button
                         className="friendButton colorGray borderRightNone"
                         onClick={() => setLeftContainerContent(LeftContainerContent.settings)}
                     >
-                        <FontAwesomeIcon icon="fa-solid fa-gear" />
+                        <FontAwesomeIcon icon={faGear} />
                     </button>
                 </div>
                 <div className="friendsContainer">

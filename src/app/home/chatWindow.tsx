@@ -1,9 +1,10 @@
 "use client"
 import TextareaAutosize from 'react-textarea-autosize';
-import { ChangeEvent, useEffect, useState, useRef } from 'react';
+import { ChangeEvent, useEffect, useState, useRef, KeyboardEvent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import "./chatWindow.css";
 import { ObjectId } from 'mongoose';
+import { faEllipsisVertical, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
 type ChatWindowProps = {
     receiverUsername: string;
@@ -11,9 +12,17 @@ type ChatWindowProps = {
     senderID: ObjectId;
 };
 
+type Message = {
+    senderID: ObjectId;
+    timestamp: Date;
+    message: string;
+    receiverUsername: string;
+    senderUsername: string;
+}
+
 const ChatWindow: React.FC<ChatWindowProps> = ({ receiverUsername, senderUsername, senderID }) => {
     const [message, setMessage] = useState<string>('');
-    const [messageHistory, setMessageHistory] = useState<object[]>([]);
+    const [messageHistory, setMessageHistory] = useState<Message[]>([]);
     const [receiverLastOnline, setReceiverLastOnline] = useState<Date>();
     const [showFriendSettings, setShowFriendSettings] = useState<boolean>(false);
 
@@ -22,7 +31,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiverUsername, senderUsernam
     const ws = useRef<WebSocket | null>(null);
     const lastMessageRef = useRef<HTMLDivElement | null>(null);
 
-    const handleChangeMessage = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleChangeMessage = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setMessage(event.target.value);
     };
 
@@ -133,7 +142,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiverUsername, senderUsernam
         switch (true) {
             case (diffSeconds < 60):
                 return "online now";
-            case (diffMinutes < 60):
+            case (diffMinutes === 1):
+                return `last online: a minute ago`;
+            case (diffMinutes > 1 && diffMinutes < 60):
                 return `last online: ${diffMinutes} minutes ago`;
             case (diffHours < 24):
                 return `last online: ${diffHours} hours ago`;
@@ -213,7 +224,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiverUsername, senderUsernam
                         className="friendSettings"
                         onClick={() => setShowFriendSettings(prevState => !prevState)}
                     >
-                        <FontAwesomeIcon icon="fa-solid fa-ellipsis-vertical" />
+                        <FontAwesomeIcon icon={faEllipsisVertical} />
                     </button>
                     {showFriendSettings &&
                         <>
@@ -257,7 +268,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiverUsername, senderUsernam
                         value={message}
                     />
                     <button className="sendMessageButton" onClick={handleSendMessage}>
-                        <FontAwesomeIcon icon="fa-solid fa-paper-plane" />
+                        <FontAwesomeIcon icon={faPaperPlane} />
                     </button>
                 </div>
             </div>

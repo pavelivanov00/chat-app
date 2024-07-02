@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (!result.lastOnline) {
             return res.status(204).end();
         }
-        console.log(result.lastOnline);
+
         return res.status(200).json({
             message: 'Last online status queried successfully',
             lastOnline: result.lastOnline

@@ -3,6 +3,7 @@ import { ObjectId } from "mongoose";
 import React from "react";
 import "./css/friendRequests.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 type FriendRequestsProps = {
     friendRequests: FriendRequest[];
@@ -40,13 +41,13 @@ const FriendRequests: React.FC<FriendRequestsProps> = ({ friendRequests, onAccep
                                     className="acceptButton"
                                     onClick={() => onAcceptRequest(request.requesterID!)}
                                 >
-                                    <FontAwesomeIcon icon="fa-solid fa-check" />
+                                    <FontAwesomeIcon icon={faCheck} />
                                 </button>
                                 <button
                                     className="cancelButton"
                                     onClick={() => onCancelRequest(request.requesterID!)}
                                 >
-                                     <FontAwesomeIcon icon="fa-solid fa-xmark" />
+                                     <FontAwesomeIcon icon={faXmark} />
                                 </button>
                             </div>
                         </div>

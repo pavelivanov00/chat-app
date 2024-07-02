@@ -46,7 +46,7 @@ const SendRequest: React.FC<SendRequestProps> = ({ requester, requesterID }) => 
     }
     return (
         <>
-            <>Enter your friend's username:</>
+            <>Enter your friend&apos;s username:</>
             <div className="addFriendContainer">
                 <input
                     type="text"
