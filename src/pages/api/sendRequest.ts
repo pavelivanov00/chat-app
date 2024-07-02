@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import mongoose from 'mongoose';
 import connectToDatabase from '../../lib/mongoose';
 import User from '../../models/User';
 import FriendRequest from '../../models/FriendRequest';
