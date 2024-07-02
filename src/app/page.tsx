@@ -42,6 +42,10 @@ export default function Login() {
     return newErrors;
   };
 
+  const someFunction = () => {
+    console.log("---------------------")
+  }
+
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     const validationErrors = validate();
@@ -103,7 +107,7 @@ export default function Login() {
         <div className='welcomeHeading'> Welcome to Chatter.</div>
         <div className='welcomeHeading marginBottom'>Start by logging in.</div>
 
-        <form onSubmit={handleLogin} className="loginForm">
+        {/* <form onSubmit={handleLogin} className="loginForm"> */}
           <div className="loginFormElement">
             <input
               type="text"
@@ -125,8 +129,8 @@ export default function Login() {
             {errors.password && <span className="errorLogin">{errors.password}</span>}
             {errors.wrongCredentials && <span className="errorLogin">{errors.wrongCredentials}</span>}
           </div>
-          <button type="submit" className="loginButton">Log in</button>
-        </form>
+          <button /*type="submit"*/ className="loginButton" onClick={someFunction}>Log in</button>
+        {/* </form> */}
 
         <div className="registerHere">
           Don&apos;t have an account? <Link href="/register">Sign up here.</Link>
