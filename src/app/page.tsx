@@ -42,8 +42,18 @@ export default function Login() {
     return newErrors;
   };
 
-  const someFunction = () => {
-    console.log("---------------------")
+  const someFunction = async () => {
+    const test = "test";
+    const response = await fetch("/api/test", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(test),
+    });
+
+    const result = await response.json();
+    console.log(result.message)
   }
 
   const handleLogin = async (event: React.FormEvent) => {
