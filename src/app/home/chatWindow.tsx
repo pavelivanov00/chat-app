@@ -39,7 +39,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ receiverUsername, senderUsernam
         fetchMessages(receiverUsername, senderID);
         fetchLastOnline(receiverUsername);
 
-        ws.current = new WebSocket('ws://localhost:8080');
+        ws.current = new WebSocket('wss://chat-app-websocket-server-8dda01ccfbf8.herokuapp.com');
         ws.current.onopen = () => {
             console.log('WebSocket connected');
             ws.current?.send(JSON.stringify({ senderUsername }));
