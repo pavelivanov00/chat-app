@@ -21,5 +21,5 @@ The app includes the following features:
 - Add a friend
 - Show friends and pending friend requests (outgoing and incoming)
 - Block and unblock users
-- Change account username, password, or email
+- Change account username, password or email
 - Upon clicking on a friend, the chat history will be queried. If both users are online, they can live chat through a WebSocket connection.
