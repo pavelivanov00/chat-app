@@ -8,11 +8,15 @@ The app can be tested on the following address: https://chat-app-nine-psi-90.ver
 - WebSocket
 - FontAwesome
 
-**Communication:**
+<p>&nbsp;</p>
+
+**Communication**
 
 The communication between the front-end and back-end is handled using HTTP methods through API calls.
 
-**Functionality:**
+<p>&nbsp;</p>
+
+**Functionality**
 
 The app includes the following features:
 
